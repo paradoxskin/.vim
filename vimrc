@@ -13,6 +13,20 @@ set incsearch
 set backspace=2
 set tabstop=4
 set t_Co=256
+set spr
+
+let mapleader=" "
+
+tnoremap <Esc> <C-w>w
+tnoremap <Leader><CR> <CR>exit<CR>
+tnoremap <Leader>p <C-w>"+
+
+noremap <Leader>p :vert term<CR>
+noremap <Leader>h <C-w>h
+noremap <Leader>j <C-w>j
+noremap <Leader>k <C-w>k
+noremap <Leader>l <C-w>l
+noremap <Leader><CR> :nohlsearch<CR>
 
 noremap <C-p> mT"+p`T
 noremap <C-y> mTggVG"+y`Tzz
