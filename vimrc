@@ -16,22 +16,23 @@ set t_Co=256
 set spr
 
 let mapleader=" "
-
+"termmap
 tnoremap <Esc> <C-w>w
 tnoremap <Leader><CR> <CR>exit<CR>
 tnoremap <Leader>p <C-w>"+
-
+"spacemask
 noremap <Leader>p :vert term<CR>
 noremap <Leader>h <C-w>h
 noremap <Leader>j <C-w>j
 noremap <Leader>k <C-w>k
 noremap <Leader>l <C-w>l
 noremap <Leader><CR> :nohlsearch<CR>
-
+"ctrlmask
 noremap <C-p> mT"+p`T
 noremap <C-y> mTggVG"+y`Tzz
 noremap <C-c> :packadd coc.nvim<CR>
 noremap <C-l> :Template<CR>
+
 noremap H 0
 noremap L $
 
