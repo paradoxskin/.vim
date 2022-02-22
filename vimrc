@@ -12,16 +12,18 @@ set hlsearch
 set incsearch
 set backspace=2
 set tabstop=4
+set shiftwidth=4
 set t_Co=256
 set spr
 
 let mapleader=" "
 "termmap
-tnoremap <Esc> <C-w>w
+"can not map the esc,or the arrow will wrong
+tnoremap <Leader><Leader> <C-w>w
 tnoremap <Leader><CR> <CR>exit<CR>
 tnoremap <Leader>p <C-w>"+
 "spacemask
-noremap <Leader>p :vert term<CR>
+noremap <Leader>p :w<CR>:vert term<CR>
 noremap <Leader>h <C-w>h
 noremap <Leader>j <C-w>j
 noremap <Leader>k <C-w>k
