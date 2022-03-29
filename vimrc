@@ -21,7 +21,7 @@ let mapleader=" "
 "can not map the esc,or the arrow will wrong
 tnoremap <Leader><Leader> <C-w>w
 tnoremap <Leader><CR> <CR>exit<CR>
-tnoremap <Leader>p <C-w>"+
+"tnoremap <Leader>p <C-w>"+
 "spacemask
 noremap <Leader>p :w<CR>:vert term<CR>
 noremap <Leader>h <C-w>h
@@ -29,6 +29,11 @@ noremap <Leader>j <C-w>j
 noremap <Leader>k <C-w>k
 noremap <Leader>l <C-w>l
 noremap <Leader><CR> :nohlsearch<CR>
+noremap <Leader>n :bn<CR>
+noremap <Leader>z :set invcursorline<CR>
+noremap <Leader>C :bd<CR>
+
+inoremap <Leader>\ <Esc>:call Autocopy()<CR>a
 "ctrlmask
 noremap <C-p> mT"+p`T
 noremap <C-y> mTggVG"+y`Tzz
@@ -37,8 +42,10 @@ noremap <C-l> :Template<CR>
 
 noremap H 0
 noremap L $
+noremap J 7j
+noremap K 7k
+noremap s :edit 
 
-map s <nop>
 map S <nop>
 
 " lightline
@@ -52,3 +59,17 @@ let g:lastplace_ignore_buftype="quickfix,nofile,help"
 
 "template
 let g:templates_no_autocmd=1
+
+
+
+"my function
+let g:Rflag=1
+function Autocopy()
+	if g:Rflag==1
+		let g:Rflag=0
+		norm mR
+	else
+		let g:Rflag=1
+		norm mTv`Ry`T
+	endif
+endfunction
