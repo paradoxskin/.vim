@@ -20,7 +20,7 @@ let mapleader=" "
 "termmap
 "can not map the esc,or the arrow will wrong
 tnoremap <Leader><Leader> <C-w>w
-tnoremap <Leader><CR> <CR>exit<CR>
+tnoremap <Leader>\ <CR>exit<CR>
 "tnoremap <Leader>p <C-w>"+
 "spacemask
 noremap <Leader>p :w<CR>:vert term<CR>
@@ -33,7 +33,7 @@ noremap <Leader>n :bn<CR>
 noremap <Leader>z :set invcursorline<CR>
 noremap <Leader>C :bd<CR>
 
-inoremap <Leader>\ <Esc>:call Autocopy()<CR>a
+inoremap <C-\> <Esc>:call Autocopy()<CR>a
 "ctrlmask
 noremap <C-p> mT"+p`T
 noremap <C-y> mTggVG"+y`Tzz
