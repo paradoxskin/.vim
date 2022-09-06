@@ -54,6 +54,7 @@ noremap s :edit
 "map for html
 noremap vo< T>vt<
 noremap vo> T>vt<
+noremap b <nop>
 
 map S <nop>
 
