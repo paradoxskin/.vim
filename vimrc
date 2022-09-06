@@ -39,6 +39,7 @@ inoremap <C-\> <Esc>:call Autocopy()<CR>a
 
 "ctrlmask
 noremap <C-p> mT"+p`T
+noremap <C-s> :w<CR>
 noremap <C-a> ggVG
 vnoremap <C-i> "+y
 noremap <C-y> mTggVG"+y`Tzz
@@ -50,6 +51,9 @@ noremap L $
 noremap J 7j
 noremap K 7k
 noremap s :edit 
+"map for html
+noremap vo< T>vt<
+noremap vo> T>vt<
 
 map S <nop>
 
