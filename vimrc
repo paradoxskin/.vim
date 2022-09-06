@@ -58,6 +58,8 @@ noremap b <nop>
 
 map S <nop>
 
+" html map
+source $HOME/.vim/html.vim
 " lightline
 set laststatus=2
 set noshowmode
