@@ -30,10 +30,12 @@ noremap <Leader>k <C-w>k
 noremap <Leader>l <C-w>l
 noremap <Leader><CR> :nohlsearch<CR>
 noremap <Leader>n :bn<CR>
+noremap <Leader>N :bp<CR>
 noremap <Leader>z :set invcursorline<CR>
 noremap <Leader>C :bd<CR>
 noremap <Leader>q qq
 noremap <Leader>2 @q
+noremap <Leader>s :call Showbf(5000)<CR>
 
 inoremap <C-\> <Esc>:call Autocopy()<CR>a
 
@@ -55,11 +57,12 @@ noremap s :edit
 noremap vo< T>vt<
 noremap vo> T>vt<
 noremap b <nop>
+noremap <c-o> <nop>
 
 map S <nop>
 
 " html map
-source $HOME/.vim/html.vim
+"source $HOME/.vim/html.vim
 " lightline
 set laststatus=2
 set noshowmode
@@ -72,7 +75,7 @@ let g:lastplace_ignore_buftype="quickfix,nofile,help"
 "template
 let g:templates_no_autocmd=1
 
-
+au BufNewFile,BufRead *.ejs set ft=html
 
 "my function
 let g:Rflag=1
