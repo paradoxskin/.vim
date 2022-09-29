@@ -36,6 +36,10 @@ noremap <Leader>C :bd<CR>
 noremap <Leader>q qq
 noremap <Leader>2 @q
 noremap <Leader>s :call Showbf(5000)<CR>
+noremap <Leader>- :tabp<CR>
+noremap <Leader>= :tabn<CR>
+noremap <Leader>] :tabnew<CR>
+noremap <Leader>[ :tabc<CR>
 
 inoremap <C-\> <Esc>:call Autocopy()<CR>a
 
