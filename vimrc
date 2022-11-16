@@ -40,6 +40,8 @@ noremap <Leader>- :tabp<CR>
 noremap <Leader>= :tabn<CR>
 noremap <Leader>] :tabnew<CR>
 noremap <Leader>[ :tabc<CR>
+noremap <Leader>c :colorscheme snazzy<CR>
+noremap <Leader>C :hi clear<CR>
 
 inoremap <C-\> <Esc>:call Autocopy()<CR>a
 
