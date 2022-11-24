@@ -72,7 +72,20 @@ map S <nop>
 " lightline
 set laststatus=2
 set noshowmode
-let g:lightline={'colorscheme':'one'}
+let g:lightline={'colorscheme':'one',
+		\ 'active': {
+		\	'right': [['lineinfo'],
+		\			  ['Bubble'],
+		\			  ['fileformat','fileencoding','filetype','percent']]
+		\ },
+		\ 'component': {
+		\ 	'Bubble': '%{g:boringBubble#Bubble}'
+		\ }
+      \ }
+      
+let g:boringBubble#len=5
+let g:boringBubble#echo=0
+let g:boringBubble#map="ooOO"
 color snazzy
 
 "lastplace
