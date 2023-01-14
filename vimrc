@@ -13,10 +13,10 @@ set incsearch
 set backspace=2
 set tabstop=4
 set shiftwidth=4
-set t_Co=256
 set spr
 
 let mapleader=" "
+
 "termmap
 "can not map the esc,or the arrow will wrong
 tnoremap <Leader><Leader> <C-w>w
@@ -46,14 +46,11 @@ noremap <Leader>C :hi clear<CR>
 inoremap <C-\> <Esc>:call Autocopy()<CR>a
 
 "ctrlmask
-noremap <C-p> mT"+p`T
-noremap <C-s> :w<CR>
-noremap <C-a> ggVG
+nnoremap <C-p> mT"+p`T
+nnoremap <C-a> ggVG
 vnoremap <C-i> "+y
-noremap <C-y> mTggVG"+y`Tzz
-noremap <C-c> :packadd coc.nvim<CR>
-"noremap <C-l> :Template<CR>
-noremap <C-l> :call TempLate()<CR>
+nnoremap <C-y> mTggVG"+y`Tzz
+"noremap <C-l> :call TempLate()<CR>
 noremap H 0
 noremap L $
 noremap J 7j
@@ -66,6 +63,12 @@ noremap b <nop>
 noremap <c-o> <nop>
 
 map S <nop>
+"fcitx5
+let fcitx5state=system("fcitx5-remote")
+" 退出插入模式时禁用输入法，并保存状态
+autocmd InsertLeave * :silent let fcitx5state=system("fcitx5-remote")[0] | silent !fcitx5-remote -c
+" 2 表示之前状态打开了输入法，则进入插入模式时启动输入法
+autocmd InsertEnter * :silent if fcitx5state == 2 | call system("fcitx5-remote -o") | endif
 
 " html map
 "source $HOME/.vim/html.vim
@@ -85,8 +88,9 @@ let g:lightline={'colorscheme':'one',
       
 let g:boringBubble#len=5
 let g:boringBubble#echo=0
-let g:boringBubble#map="ooOO"
+let g:boringBubble#map="--**"
 color snazzy
+let g:SnazzyTransparent = 1
 
 "lastplace
 let g:lastplace_ignore_buftype="quickfix,nofile,help"

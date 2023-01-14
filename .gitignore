@@ -1,3 +1,4 @@
 
 .netrwhist
-pack/selfwrite/start
+pack/*
+
