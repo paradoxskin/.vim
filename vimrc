@@ -63,9 +63,9 @@ noremap s :edit
 
 
 "fcitx5
-let fcitx5state=system("fcitx5-remote")
-au InsertLeave * silent let fcitx5state=system("fcitx5-remote")[0] | silent !fcitx5-remote -c
-au InsertEnter * silent if fcitx5state == 2 | call system("fcitx5-remote -o") | endif
+"let fcitx5state=system("fcitx5-remote")
+"au InsertLeave * silent let fcitx5state=system("fcitx5-remote")[0] | silent !fcitx5-remote -c
+"au InsertEnter * silent if fcitx5state == 2 | call system("fcitx5-remote -o") | endif
 
 "ejs
 au BufNewFile,BufRead *.ejs set ft=html

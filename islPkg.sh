@@ -4,3 +4,4 @@ git clone git@github.com:paradoxskin/boringBubble.vim.git ./pack/selfwrite/start
 git clone git@github.com:farmergreg/vim-lastplace.git ./pack/useful/start/vim-lastplace
 git clone --branch release git@github.com:neoclide/coc.nvim.git ./pack/useful/opt/coc.nvim
 git clone git@github.com:paradoxskin/popup-buffer.git ./pack/selfwrite/start/popup-buffer
+git clone git@github.com:paradoxskin/mapChange.vim.git ./pack/selfwrite/start/mapChange.vim

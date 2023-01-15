@@ -21,5 +21,6 @@ let g:SnazzyTransparent = 1
 "lastplace
 let g:lastplace_ignore_buftype="quickfix,nofile,help"
 
-"template
-let g:templates_no_autocmd=1
+"mapChange
+nnoremap <Leader>m :ChgMap 
+source $HOME/.vim/mask.vim
