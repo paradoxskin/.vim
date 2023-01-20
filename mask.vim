@@ -22,17 +22,18 @@ g:vimMap = {
 		"nnoremap <Leader>K :call CocActionAsync('doHover')<CR>",
 		# has some bug
 		"nmap <silent> <Leader>rn <Plug>(coc-rename)",
-		"nmap <silent> - <Plug>(coc-diagnostic-prev)",
-		"nmap <silent> = <Plug>(coc-diagnostic-next)",
+		"nmap <silent> _ <Plug>(coc-diagnostic-prev)",
+		"nmap <silent> - <Plug>(coc-diagnostic-next)",
 		"nmap <silent> <Leader>g <Plug>(coc-definition)",
 		"nmap <Leader>tr <Plug>(coc-translator-p)",
 		"vmap <Leader>tr <Plug>(coc-translator-pv)",
-		"nnoremap <Leader>s :call SwHLSame()<CR>",
-		# switch the complete
-		"nnoremap <Leader>q :let b:coc_suggest_disable=1-b:coc_suggest_disable<CR>",
-		"nnoremap <Leader>tt :CocCommand explorer --quit-on-open<CR>",
-		"nnoremap <Leader>tl :CocCommand explorer --position right --width 33<CR>",
-		"nnoremap <Leader>tv :CocCommand explorer --preset .vim<CR>",
+		#"nnoremap <Leader>s :call SwHLSame()<CR>",
+		# switch the complete, let it open
+		#"nnoremap <Leader>q :let b:coc_suggest_disable=1-b:coc_suggest_disable<CR>",
+		# coc-explorer, don't use it in linux, i have ranger
+		#"nnoremap <Leader>tt :CocCommand explorer --quit-on-open<CR>",
+		#"nnoremap <Leader>tl :CocCommand explorer --position right --width 33<CR>",
+		#"nnoremap <Leader>tv :CocCommand explorer --preset .vim<CR>",
 		"echo '[M] COC Loaded.'",
 	],
 }
