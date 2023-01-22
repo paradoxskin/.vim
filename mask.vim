@@ -15,6 +15,8 @@ g:vimMap = {
 	],
 	"coc": [
 		"packadd coc.nvim",
+		"packadd vim-snippets",
+		"packadd ultisnips",
 		"CocStart",
 		"inoremap <expr> <C-Space> coc#refresh()",
 		"inoremap <expr> <Tab> pumvisible() ? coc#pum#next(1) : \"\<Tab>\"",
