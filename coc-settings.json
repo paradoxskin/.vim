@@ -34,7 +34,7 @@
 		"snippet": "{\uf9b1}",
 		"text": " \uf49e ",
 		"constructor": "  ",
-		"value": " \u91c ",
+		"value": " \uf91c ",
 		"enumMember": "  "
 	},
 	"diagnostic.signOffset": 1,
@@ -47,5 +47,7 @@
 	"diagnostic.refreshAfterSave": false,
 	"diagnostic.checkCurrentLine": true,
 	"diagnostic.virtualText": true,
-	"diagnostic.virtualTextPrefix": ">>>"
+	"diagnostic.virtualTextPrefix": ">>>",
+	"diagnostic.virtualTextCurrentLineOnly": false,
+	"diagnostic.messageTarget": "float"
 }
