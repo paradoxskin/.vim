@@ -21,6 +21,7 @@ set cursorline
 set ttimeoutlen=50
 
 let mapleader=" "
+let g:netrw_fastbrowse=0
 
 map S <nop>
 
