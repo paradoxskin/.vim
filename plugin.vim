@@ -31,3 +31,8 @@ let g:UltiSnipsExpandTrigger="<c-d>"
 let g:UltiSnipsJumpForwardTrigger="<c-d>"
 let g:UltiSnipsJumpBackwardTrigger="<c-f>"
 let g:UltiSnipsEditSplit="vertical"
+
+" ranger-explorer.vim
+nnoremap <silent><Leader>ra :RangerOpenCurrentFile<CR>
+nnoremap <silent><Leader>rd :RangerOpenCurrentDir<CR>
+nnoremap <silent><Leader>rr :RangerOpenProjectRootDir<CR>
