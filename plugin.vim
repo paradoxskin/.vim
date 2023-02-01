@@ -36,3 +36,6 @@ let g:UltiSnipsEditSplit="vertical"
 nnoremap <silent><Leader>ra :RangerOpenCurrentFile<CR>
 nnoremap <silent><Leader>rd :RangerOpenCurrentDir<CR>
 nnoremap <silent><Leader>rr :RangerOpenProjectRootDir<CR>
+let g:ranger_explorer_keymap_edit = 'e'
+let g:ranger_explorer_keymap_vsplit = 'v'
+let g:ranger_explorer_keymap_split = 's'
