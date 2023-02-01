@@ -21,7 +21,7 @@ g:vimMap = {
 		"inoremap <expr> <C-Space> coc#refresh()",
 		"inoremap <expr> <Tab> pumvisible() ? coc#pum#next(1) : \"\<Tab>\"",
 		"inoremap <expr> <S-Tab> pumvisible() ? coc#pum#prev(1) : \"\<S-Tab>\"",
-		"nnoremap <Leader>k :call CocActionAsync('doHover')<CR>",
+		"nnoremap <Leader>K :call CocActionAsync('doHover')<CR>",
 		# has some bug
 		"nmap <silent> <Leader>rn <Plug>(coc-rename)",
 		"nmap <silent> _ <Plug>(coc-diagnostic-prev)",
