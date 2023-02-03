@@ -31,3 +31,6 @@ let g:UltiSnipsExpandTrigger="<c-d>"
 let g:UltiSnipsJumpForwardTrigger="<c-d>"
 let g:UltiSnipsJumpBackwardTrigger="<c-f>"
 let g:UltiSnipsEditSplit="vertical"
+
+" tagbar
+nmap <F10> :TagbarToggle<CR>
