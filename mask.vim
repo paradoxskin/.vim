@@ -36,6 +36,6 @@ g:vimMap = {
 		#"nnoremap <Leader>tt :CocCommand explorer --quit-on-open<CR>",
 		#"nnoremap <Leader>tl :CocCommand explorer --position right --width 33<CR>",
 		#"nnoremap <Leader>tv :CocCommand explorer --preset .vim<CR>",
-		"echo '[M] COC Loaded.'",
+		#"echo '[M] COC Loaded.'",
 	],
 }

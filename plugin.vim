@@ -25,6 +25,7 @@ let g:lastplace_ignore_buftype="quickfix,nofile,help"
 " mapChange
 nnoremap <Leader>m :ChgMap 
 source $HOME/.vim/mask.vim
+let g:vimMapInit="coc"
 
 " snippets
 let g:UltiSnipsExpandTrigger="<c-d>"
