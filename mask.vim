@@ -19,8 +19,10 @@ g:vimMap = {
 		"packadd ultisnips",
 		"CocStart",
 		"inoremap <expr> <C-Space> coc#refresh()",
-		"inoremap <expr> <Tab> pumvisible() ? coc#pum#next(1) : \"\<Tab>\"",
-		"inoremap <expr> <S-Tab> pumvisible() ? coc#pum#prev(1) : \"\<S-Tab>\"",
+		#"inoremap <expr> <Tab> pumvisible() ? coc#pum#next(1) : \"\<Tab>\"",
+		#"inoremap <expr> [Z pumvisible() ? coc#pum#prev(1) : \"\<Tab>\"",
+		"inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : \"\<Tab>\"",
+		"inoremap <expr> [Z coc#pum#visible() ? coc#pum#prev(1) : \"\<Tab>\"",
 		"nnoremap <Leader>K :call CocActionAsync('doHover')<CR>",
 		# has some bug
 		"nmap <silent> <Leader>rn <Plug>(coc-rename)",

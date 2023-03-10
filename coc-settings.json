@@ -49,5 +49,6 @@
 	"diagnostic.virtualText": true,
 	"diagnostic.virtualTextPrefix": ">>>",
 	"diagnostic.virtualTextCurrentLineOnly": false,
-	"diagnostic.messageTarget": "float"
+	"diagnostic.messageTarget": "float",
+	"rust-analyzer.server.path": "/usr/bin/rust-analyzer"
 }
