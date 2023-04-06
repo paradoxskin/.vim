@@ -19,6 +19,7 @@ set tabstop=4
 set shiftwidth=4
 set cursorline
 set ttimeoutlen=50
+set fdm=syntax
 
 let mapleader=" "
 let g:netrw_fastbrowse=0
