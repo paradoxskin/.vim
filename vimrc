@@ -36,6 +36,7 @@ noremap <Leader>h <C-w>h
 noremap <Leader>j <C-w>j
 noremap <Leader>k <C-w>k
 noremap <Leader>l <C-w>l
+noremap <Leader>a ggVG
 noremap <Leader><CR> :nohlsearch<CR>
 noremap <Leader>n :bn<CR>
 noremap <Leader>N :bp<CR>
@@ -51,7 +52,6 @@ noremap <Leader>[ :tabc<CR>
 "ctrlmask
 noremap <C-o> <nop>
 nnoremap <C-p> mT"+p`T
-nnoremap <C-a> ggVG
 vnoremap <C-i> "+y
 nnoremap <C-y> mTggVG"+y`Tzz
 vnoremap <C-y> mT"+y`Tzz
