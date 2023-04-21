@@ -9,3 +9,4 @@ git clone git@github.com:SirVer/ultisnips.git ./pack/useful/opt/ultisnips
 git clone git@github.com:honza/vim-snippets.git ./pack/useful/opt/vim-snippets
 git clone git@github.com:iberianpig/ranger-explorer.vim.git ./pack/useful/start/ranger-explorer.vim
 git clone git@github.com:preservim/tagbar.git ./pack/useful/start/tagbar
+git clone git@github.com:paradoxskin/ShowTrailingWhitespace.git ./pack/useful/start/ShowTrailingWhitespace
