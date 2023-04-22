@@ -31,6 +31,7 @@ tnoremap <Leader><Leader> <C-w>w
 tnoremap <Leader>\ <CR>exit<CR>
 
 "spacemask
+noremap <expr> <Leader>M &fdm=="syntax" ? ':set fdm=manual<CR>' : ':set fdm=syntax<CR>'
 noremap <Leader>p :w<CR>:vert term<CR>
 noremap <Leader>h <C-w>h
 noremap <Leader>j <C-w>j
@@ -63,6 +64,9 @@ noremap J 7j
 noremap K 7k
 noremap s :edit 
 
+" autocmd
+au BufWinEnter * silent! loadview
+au VimLeave,BufLeave * silent! mkview
 
 "fcitx5
 "let fcitx5state=system("fcitx5-remote")
