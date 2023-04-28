@@ -28,6 +28,7 @@ g:vimMap = {
 		"inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : \"\<Tab>\"",
 		"inoremap <expr> [Z coc#pum#visible() ? coc#pum#prev(1) : \"\<Tab>\"",
 		"nnoremap <Leader>K :call CocActionAsync('doHover')<CR>",
+		"nnoremap <Leader>d :call CocAction('diagnosticToggle')<CR>",
 		# has some bug
 		"nmap <silent> <Leader>rn <Plug>(coc-rename)",
 		"nmap <silent> _ <Plug>(coc-diagnostic-prev)",
