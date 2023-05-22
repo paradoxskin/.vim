@@ -50,5 +50,10 @@
 	"diagnostic.virtualTextPrefix": ">>>",
 	"diagnostic.virtualTextCurrentLineOnly": false,
 	"diagnostic.messageTarget": "float",
-	"rust-analyzer.server.path": "/usr/bin/rust-analyzer"
+	"rust-analyzer.server.path": "/usr/bin/rust-analyzer",
+	"git.changedSign.text": "│",
+	"git.addedSign.text": "│",
+	"git.removedSign.text": "│",
+	"git.topRemovedSign.text": "│",
+	"git.changeRemovedSign.text": "│",
 }
