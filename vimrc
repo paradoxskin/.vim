@@ -64,6 +64,9 @@ noremap J 7j
 noremap K 7k
 noremap s :edit 
 
+" good looking─
+set fillchars+=vert:│
+
 " autocmd
 au BufWinEnter * silent! loadview
 au VimLeave,BufLeave * silent! mkview
