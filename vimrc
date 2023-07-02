@@ -15,8 +15,6 @@ set ignorecase
 set noshowmode
 set laststatus=2
 set backspace=2
-set tabstop=4
-set shiftwidth=4
 set cursorline
 set ttimeoutlen=50
 set fdm=syntax
@@ -25,6 +23,13 @@ let mapleader=" "
 let g:netrw_fastbrowse=0
 
 map S <nop>
+
+"tab and space
+set shiftwidth=4
+set tabstop=4
+set expandtab
+set softtabstop=4
+inoremap <S-Tab> <C-d>
 
 "termmap
 tnoremap <Leader><Leader> <C-w>w
