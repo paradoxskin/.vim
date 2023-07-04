@@ -1,23 +1,54 @@
-snippet div
-<div class="$1">
-	$2
-</div>
+snippet t "tag" b
+<${1:div}${2}>
+    ${3}
+</$1>
 endsnippet
 
-snippet divl
-<div class="$1">$2</div>
+snippet tl "tag singline" b
+<${1:div}>${2}</$1>
 endsnippet
 
-snippet import
-<script src="$1"></script>
+snippet ti "tag inline" b
+<${1:a} ${2} />
 endsnippet
 
-snippet t
-	<${1:}${2}>
-		${3}
-	</$1>
+#----------------------------------------------- NFS
+
+snippet hello "description" s
+hello, world
 endsnippet
-# inline tag
-snippet ti
-	<${1:}>${2}</$1>
+
+snippet ptry "Description" b
+${1:1}
+`!p if t[1] == "1":
+    snip.rv="it's1"
+else:
+    snip.rv="it's not 1"
+`
+endsnippet
+
+snippet ptry2 "Description" b
+${1:1}
+`!p snip.rv=str(len(t[1]))`
+endsnippet
+
+snippet ptry3 "Description" b
+`!p snip.rv="\`!p snip.rv='6'\`"`
+endsnippet
+
+snippet ptry4 "Description" b
+$1
+$2
+`!p t[2]="233"`
+endsnippet
+
+snippet ptry5 "Description" b
+$1
+`!p snip.rv=str(t)`
+endsnippet
+
+snippet ptry6 "Description" b
+$1
+`!p if t[1] != "":
+	snip.rv=str(t[1])[-1]`
 endsnippet

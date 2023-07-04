@@ -12,7 +12,7 @@ let g:lightline={'colorscheme':'one',
 		\ 	'Bubble': '%{g:boringBubble#Bubble}'
 		\ }
       \ }
-      
+
 " Bubble
 let g:boringBubble#len=5
 let g:boringBubble#echo=0
