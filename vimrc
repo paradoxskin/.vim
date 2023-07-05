@@ -7,6 +7,7 @@ set shortmess+=c
 set autoindent
 set nocompatible
 set wildmenu
+set wildoptions+=pum
 set hlsearch
 set incsearch
 set spr
