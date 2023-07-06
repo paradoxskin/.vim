@@ -28,7 +28,7 @@ source $HOME/.vim/mask.vim
 let g:vimMapInit="coc"
 
 " snippets
-let g:UltiSnipsExpandTrigger="<c-d>"
+let g:UltiSnipsExpandTrigger="<c-e>"
 let g:UltiSnipsJumpForwardTrigger="<c-d>"
 let g:UltiSnipsJumpBackwardTrigger="<c-f>"
 let g:UltiSnipsEditSplit="vertical"
