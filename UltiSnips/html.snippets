@@ -80,3 +80,28 @@ $2
 $3
 $4
 endsnippet
+
+global !p
+def capture_last_text(snip, last_text):
+	snip.expand_anon("-{}-".format(last_text))
+endglobal
+post_jump "if snip.tabstop not in [0, 1] : capture_last_text(snip, snip.tabstops[snip.tabstop - 1].current_text)"
+snippet getnum "Description" b
+$1 $2 $3 $4 $5
+$0
+endsnippet
+
+global !p
+def add_tap_stop(snip, number):
+	text = ""
+	for i in range(int(number - 1)):
+		text += "${}=\"${}\" ".format("{" + str(i*2 + 3) + ":att" + str(i + 1) + "}", str(i*2 + 4))
+	text += "${}=\"${}\" ".format("{" + str(number*2 + 1) + ":att" + str(number) + "}", str(number*2 + 2))
+	snip.expand_anon(text)
+endglobal
+post_jump "if snip.tabstop == 3: add_tap_stop(snip, int(snip.tabstops[2].current_text))"
+snippet testit "Description" b
+<${1} $2$3>
+$0
+<$1>
+endsnippet
