@@ -69,6 +69,7 @@ noremap L $
 noremap J 7j
 noremap K 7k
 noremap s :edit 
+noremap <C-z> :qa!
 
 " good looking─
 set fillchars+=vert:│
