@@ -85,6 +85,7 @@ au VimLeave,BufLeave * silent! mkview
 
 "ejs
 au BufNewFile,BufRead *.ejs set ft=html
+au BufNewFile,BufRead *.pde set ft=processing
 
 "plugin config
 if(has("win32") || has("win64") || has("win95") || has("win16"))
