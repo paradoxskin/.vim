@@ -24,7 +24,11 @@ let g:lastplace_ignore_buftype="quickfix,nofile,help"
 
 " mapChange
 nnoremap <Leader>m :ChgMap 
-source $HOME/.vim/mask.vim
+if(has("win32") || has("win64") || has("win95") || has("win16"))
+    source $HOME/vimfiles/mask.vim
+else
+    source $HOME/.vim/mask.vim
+endif
 let g:vimMapInit="coc"
 
 " snippets

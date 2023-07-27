@@ -87,4 +87,8 @@ au VimLeave,BufLeave * silent! mkview
 au BufNewFile,BufRead *.ejs set ft=html
 
 "plugin config
-source ~/.vim/plugin.vim
+if(has("win32") || has("win64") || has("win95") || has("win16"))
+    source $HOME/vimfiles/plugin.vim
+else
+    source ~/.vim/plugin.vim
+endif
