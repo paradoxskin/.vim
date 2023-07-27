@@ -1,0 +1,37 @@
+[submodule "pack/beaut/start/vim-snazzy"]
+	path = pack/beaut/start/vim-snazzy
+	url = https://github.com/paradoxskin/vim-snazzy.git
+[submodule "pack/selfwrite/start/boringBubble.vim"]
+	path = pack/selfwrite/start/boringBubble.vim
+	url = https://github.com/paradoxskin/boringBubble.vim.git
+[submodule "pack/selfwrite/start/popup-buffer"]
+	path = pack/selfwrite/start/popup-buffer
+	url = https://github.com/paradoxskin/popup-buffer.git
+[submodule "pack/useful/start/tagbar"]
+	path = pack/useful/start/tagbar
+	url = https://github.com/paradoxskin/tagbar.git
+[submodule "pack/useful/start/ShowTrailingWhitespace"]
+	path = pack/useful/start/ShowTrailingWhitespace
+	url = https://github.com/paradoxskin/ShowTrailingWhitespace.git
+[submodule "pack/selfwrite/start/mapChange.vim"]
+	path = pack/selfwrite/start/mapChange.vim
+	url = https://github.com/paradoxskin/mapChange.vim.git
+[submodule "pack/beaut/start/lightline.vim"]
+	path = pack/beaut/start/lightline.vim
+	url = https://github.com/itchyny/lightline.vim.git
+[submodule "pack/useful/start/vim-lastplace"]
+	path = pack/useful/start/vim-lastplace
+	url = https://github.com/farmergreg/vim-lastplace.git
+[submodule "pack/useful/start/ranger-explorer.vim"]
+	path = pack/useful/start/ranger-explorer.vim
+	url = https://github.com/iberianpig/ranger-explorer.vim.git
+[submodule "pack/useful/opt/vim-snippets"]
+	path = pack/useful/opt/vim-snippets
+	url = https://github.com/honza/vim-snippets.git
+[submodule "pack/useful/opt/ultisnips"]
+	path = pack/useful/opt/ultisnips
+	url = https://github.com/SirVer/ultisnips.git
+[submodule "pack/useful/opt/coc.nvim"]
+	path = pack/useful/opt/coc.nvim
+	url = https://github.com/neoclide/coc.nvim.git
+	branch = release
