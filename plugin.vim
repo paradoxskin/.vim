@@ -47,3 +47,6 @@ let g:ranger_explorer_keymap_split = 's'
 
 " tagbar
 nmap <F10> :TagbarToggle<CR>
+
+" indentLine
+let g:indentLine_char = '┆'
