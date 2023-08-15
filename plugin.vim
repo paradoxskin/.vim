@@ -1,6 +1,7 @@
 " snazzy
 color snazzy
 nnoremap <Leader>Z :color snazzy<CR>:let g:SnazzyTransparent=1-g:SnazzyTransparent<CR>
+let g:SnazzyTransparent = 1
 
 " lightline
 let g:lightline={'colorscheme':'one',
@@ -16,8 +17,7 @@ let g:lightline={'colorscheme':'one',
 " Bubble
 let g:boringBubble#len=5
 let g:boringBubble#echo=0
-let g:boringBubble#map="--**"
-let g:SnazzyTransparent = 1
+let g:boringBubble#map="coco"
 
 " lastplace
 let g:lastplace_ignore_buftype="quickfix,nofile,help"
