@@ -66,8 +66,8 @@ vnoremap <C-y> mT"+y`Tzz
 " normalmask
 noremap H 0
 noremap L $
-noremap J 7j
-noremap K 7k
+noremap <C-j> 7j
+noremap <C-k> 7k
 noremap s :edit 
 noremap <C-z> :qa!
 
