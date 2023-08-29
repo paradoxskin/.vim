@@ -30,6 +30,9 @@ g:vimMap = {
 		"nnoremap <Leader>K :call CocActionAsync('doHover')<CR>",
 		"nnoremap <Leader>d :call CocAction('diagnosticToggle')<CR>",
 		"nnoremap <Leader>i :CocCommand document.toggleInlayHint<CR>",
+		# p8
+		"nnoremap <Leader>; :call system('pico8 -run '..expand('%')..' &')<CR>",
+		"nnoremap <Leader>e :e<CR>",
 		# has some bug
 		"nmap <silent> <Leader>rn <Plug>(coc-rename)",
 		"nmap <silent> _ <Plug>(coc-diagnostic-prev)",
