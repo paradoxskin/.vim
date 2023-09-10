@@ -93,3 +93,14 @@ if(has("win32") || has("win64") || has("win95") || has("win16"))
 else
     source ~/.vim/plugin.vim
 endif
+
+
+"fold
+set foldtext=MyFoldText()
+function! MyFoldText()
+	let text = substitute(getline(v:foldstart), '\s*$', '', '')
+	let text = substitute(text, '\t', '', 'g')
+    let text = substitute(text, '^ *', '', '')
+    let text = substitute(text, ' *$', '', '')
+    return '▶ ' . text . ' = ' . (v:foldend - v:foldstart + 1) . ' '
+endfunction
