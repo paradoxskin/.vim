@@ -4,6 +4,7 @@ set rnu
 set hidden
 set ut=60
 set shortmess+=c
+set shortmess-=S
 set autoindent
 set nocompatible
 set wildmenu
@@ -31,6 +32,9 @@ set tabstop=4
 set expandtab
 set softtabstop=4
 inoremap <S-Tab> <C-d>
+
+"visual map
+vnoremap i g<C-g>
 
 "termmap
 tnoremap <Leader><Leader> <C-w>w
