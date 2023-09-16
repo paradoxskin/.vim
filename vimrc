@@ -34,7 +34,7 @@ set softtabstop=4
 inoremap <S-Tab> <C-d>
 
 "visual map
-vnoremap i g<C-g>
+vnoremap <Leader>i g<C-g>
 
 "termmap
 tnoremap <Leader><Leader> <C-w>w
@@ -108,3 +108,9 @@ function! MyFoldText()
     let text = substitute(text, ' *$', '', '')
     return '▶ ' . text . ' = ' . (v:foldend - v:foldstart + 1) . ' '
 endfunction
+
+"gvim
+set guifont=SauceCodePro\ Nerd\ Font\ Semibold\ 14
+set guioptions-=T
+set guioptions-=m
+set guicursor=a:blinkon0
