@@ -52,7 +52,7 @@ nmap <F10> :TagbarToggle<CR>
 let g:indentLine_char = '┆'
 
 " coc-nvim
-inoremap <C-e> <Plug>(coc-snippets-expand)
+"inoremap <C-e> <Plug>(coc-snippets-expand)
 let g:coc_global_extensions = [
     \ 'coc-git',
     \ 'coc-snippets',

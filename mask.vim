@@ -16,7 +16,7 @@ g:vimMap = {
 	"coc": [
 		"packadd coc.nvim",
 		"packadd vim-snippets",
-		#"packadd ultisnips",
+		"packadd ultisnips",
 		"CocStart",
 		"nnoremap <expr> <C-j> coc#float#has_scroll() ? coc#float#scroll(1) : \"<C-j>\"",
 		"nnoremap <expr> <C-k> coc#float#has_scroll() ? coc#float#scroll(0) : \"<C-k>\"",
