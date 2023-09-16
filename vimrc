@@ -110,7 +110,11 @@ function! MyFoldText()
 endfunction
 
 "gvim
-set guifont=SauceCodePro\ Nerd\ Font\ Semibold\ 14
+if(has("win32") || has("win64") || has("win95") || has("win16"))
+    set guifont=SauceCodePro_Nerd_Font:h14:cANSI
+else
+    set guifont=SauceCodePro\ Nerd\ Font\ Semibold\ 14
+endif
 set guioptions-=T
 set guioptions-=m
 set guicursor=a:blinkon0
