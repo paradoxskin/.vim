@@ -4,14 +4,19 @@ nnoremap <Leader>Z :color snazzy<CR>:let g:SnazzyTransparent=1-g:SnazzyTranspare
 let g:SnazzyTransparent = 1
 
 " lightline
-let g:lightline={'colorscheme':'one',
+let g:lightline={'colorscheme':'paradoxskin',
 		\ 'active': {
-		\	'right': [['lineinfo'], ['Bubble'], ['fileformat', 'fileencoding', 'filetype']],
-		\	'left': [['filename'], ['percent'], ['modified', 'readonly']]
+		\	'left': [['filename'], ['percent'], ['modified', 'readonly']],
+		\	'right': [['lineinfo'], ['Bubble'], ['fileformat', 'fileencoding', 'filetype']]
 		\ },
+		\ 'tabline': {
+		\   'left': [['tabs']],
+		\   'right': [['tablogo']]
+        \ },
 		\ 'component': {
-		\ 	'Bubble': '%{g:boringBubble#Bubble}'
-		\ }
+		\ 	'Bubble': '%{g:boringBubble#Bubble}',
+        \   'tablogo': '%{"󰱫"}'
+		\ },
       \ }
 
 " Bubble
