@@ -50,3 +50,23 @@ nmap <F10> :TagbarToggle<CR>
 
 " indentLine
 let g:indentLine_char = '┆'
+
+" coc-nvim
+inoremap <C-e> <Plug>(coc-snippets-expand)
+let g:coc_global_extensions = [
+    \ 'coc-git',
+    \ 'coc-snippets',
+    "\ 'coc-explorer',
+    \ 'coc-translator',
+    "\ 'coc-highlight',
+    \ 'coc-marketplace',
+    "\ 'coc-go',
+    "\ 'coc-xml',
+    "\ 'coc-sql',
+    "\ 'coc-java',
+    "\ 'coc-html',
+    "\ 'coc-clangd',
+    "\ 'coc-vimlsp',
+    "\ 'coc-tsserver',
+    "\ 'coc-rust-analyzer',
+\]
