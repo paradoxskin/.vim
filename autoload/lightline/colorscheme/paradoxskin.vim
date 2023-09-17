@@ -41,7 +41,7 @@ else
 endif
 
 " Common
-let s:p.normal.left    = [ [ s:fg, s:gray2, 'bold' ], [ s:fg, s:gray3 ] ]
+let s:p.normal.left    = [ [ s:fg, s:gray2, 'bold' ], [ s:fg, s:gray3 ], [s:bg, s:green] ]
 let s:p.normal.middle  = [ [ s:fg, s:gray2 ] ]
 let s:p.normal.right   = [ [ s:bg, s:green, 'bold' ], [ s:fg, s:gray3, 'bold' ] ]
 let s:p.normal.error   = [ [ s:red2, s:bg ] ]
@@ -51,7 +51,7 @@ let s:p.insert.left    = [ [ s:fg, s:gray2, 'bold' ], [ s:fg, s:gray3 ] ]
 let s:p.replace.right  = [ [ s:fg, s:gray3, 'bold' ], [ s:bg, s:red1, 'bold' ] ]
 let s:p.replace.left   = [ [ s:fg, s:gray2, 'bold' ], [ s:fg, s:gray3 ] ]
 let s:p.visual.right   = [ [ s:bg, s:purple, 'bold' ], [ s:fg, s:gray3, 'bold' ] ]
-let s:p.visual.left    = [ [ s:fg, s:gray2, 'bold' ], [ s:fg, s:gray3 ] ]
+let s:p.visual.left    = [ [ s:fg, s:gray2, 'bold' ], [ s:fg, s:gray3 ], [s:bg, s:purple] ]
 let s:p.tabline.left   = [ [ s:fg, s:gray3 ] ]
 let s:p.tabline.tabsel = [ [ s:bg, s:purple, 'bold' ] ]
 let s:p.tabline.middle = [ [ s:gray3, s:gray2 ] ]
