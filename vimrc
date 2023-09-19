@@ -59,15 +59,15 @@ noremap <Leader>- :tabp<CR>
 noremap <Leader>= :tabn<CR>
 noremap <Leader>] :tabnew<CR>
 noremap <Leader>[ :tabc<CR>
+noremap <Leader>f <C-o>
 
 "ctrlmask
-noremap <C-o> <nop>
+nnoremap <C-o> <nop>
 nnoremap <C-p> mT"+p`T
-vnoremap <C-i> "+y
 nnoremap <C-y> mTggVG"+y`Tzz
 vnoremap <C-y> mT"+y`Tzz
 
-" normalmask
+"normalmask
 noremap H 0
 noremap L $
 noremap <C-j> 7j
@@ -75,10 +75,10 @@ noremap <C-k> 7k
 noremap s :edit 
 noremap <C-z> :qa!
 
-" good looking─
+"good looking
 set fillchars+=vert:│
 
-" autocmd
+"autocmd
 au BufWinEnter * silent! loadview
 au VimLeave,BufLeave * silent! mkview
 
