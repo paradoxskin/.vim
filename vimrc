@@ -91,6 +91,19 @@ au VimLeave,BufLeave,BufWritePost * silent! mkview
 au BufNewFile,BufRead *.ejs set ft=html
 au BufNewFile,BufRead *.pde set ft=processing
 
+"pico8
+au Filetype pico8 nnoremap <buffer> <Leader>] :call Nxt(1)<CR>
+au Filetype pico8 nnoremap <buffer> <Leader>[ :call Nxt(0)<CR>
+function Nxt(f)
+    if a:f == 1
+        normal /\(-->8\n\)\@<=-ztj
+    else
+        normal ?\(-->8\n\)\@<=-nztj
+    endif
+    set nohlsearch
+    echo getline(line('.')-1)
+endfunction
+
 "plugin config
 if(has("win32") || has("win64") || has("win95") || has("win16"))
     source $HOME/vimfiles/plugin.vim
