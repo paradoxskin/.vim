@@ -40,4 +40,4 @@
 	url = git@github.com:Yggdroot/indentLine.git
 [submodule "pack/syntax/start/vim-pico8-syntax"]
 	path = pack/syntax/start/vim-pico8-syntax
-	url = git@github.com:justinj/vim-pico8-syntax.git
+	url = git@github.com:paradoxskin/vim-pico8-color.git

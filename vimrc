@@ -19,7 +19,7 @@ set laststatus=2
 set backspace=2
 set cursorline
 set ttimeoutlen=50
-set fdm=syntax
+set fdm=manual
 
 let mapleader=" "
 let g:netrw_fastbrowse=0
@@ -80,7 +80,7 @@ set fillchars+=vert:│
 
 "autocmd
 au BufWinEnter * silent! loadview
-au VimLeave,BufLeave * silent! mkview
+au VimLeave,BufLeave,BufWritePost * silent! mkview
 
 "fcitx5
 "let fcitx5state=system("fcitx5-remote")
