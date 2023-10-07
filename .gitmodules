@@ -38,6 +38,6 @@
 [submodule "pack/beaut/start/indentLine"]
 	path = pack/beaut/start/indentLine
 	url = git@github.com:Yggdroot/indentLine.git
-[submodule "pack/syntax/start/vim-pico8-syntax"]
+[submodule "paradoxskin"]
 	path = pack/syntax/start/vim-pico8-syntax
-	url = git@github.com:paradoxskin/vim-pico8-color.git
+	url = git@github.com:paradoxskin/vim-pico8-syntax.git
