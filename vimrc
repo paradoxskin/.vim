@@ -2,132 +2,99 @@ syntax on
 set nu
 set rnu
 set hidden
-set ut=60
 set shortmess+=c
-set shortmess-=S
+set backspace=2
 set autoindent
-set nocompatible
-set wildmenu
-set wildoptions+=pum
 set hlsearch
 set incsearch
-set spr
 set smartcase
 set ignorecase
-set noshowmode
-set laststatus=2
-set backspace=2
-set cursorline
-set ttimeoutlen=50
-set fdm=manual
-
-let mapleader=" "
-let g:netrw_fastbrowse=0
-
-map S <nop>
-
-"tab and space
+set wildmenu
+set wildoptions+=pum
 set shiftwidth=4
-set tabstop=4
+set tabstop=6
 set expandtab
 set softtabstop=4
-inoremap <S-Tab> <C-d>
+set spr
+set ttimeoutlen=10
+set noshowmode
+set signcolumn=yes
+set cursorline
+set laststatus=2
+set statusline=\ %#Edflag#%{Editornot()}%#StatusLine#\ %f\ %r
+set undofile
+set undodir=~/.vim/undo
 
-"visual map
-vnoremap <Leader>i g<C-g>
-
-"termmap
-tnoremap <Leader><Leader> <C-w>w
-tnoremap <Leader>\ <CR>exit<CR>
-
-"spacemask
-noremap <expr> <Leader>M &fdm=="syntax" ? ':set fdm=manual<CR>' : ':set fdm=syntax<CR>'
-noremap <Leader>p :w<CR>:vert term<CR>
-noremap <Leader>h <C-w>h
-noremap <Leader>j <C-w>j
-noremap <Leader>k <C-w>k
-noremap <Leader>l <C-w>l
-noremap <Leader>a ggVG
-noremap <Leader><CR> :nohlsearch<CR>
-noremap <Leader>n :bn<CR>
-noremap <Leader>N :bp<CR>
-noremap <Leader>C :bd!<CR>
-noremap <Leader>z :set invcursorline<CR>
-noremap <Leader>2 @q
-noremap <Leader>s :call Showbf(5000)<CR>
-noremap <Leader>- :tabp<CR>
-noremap <Leader>= :tabn<CR>
-noremap <Leader>] :tabnew<CR>
-noremap <Leader>[ :tabc<CR>
-noremap <Leader>f <C-o>
-
-"ctrlmask
-nnoremap <C-o> <nop>
-nnoremap <C-p> mT"+p`T
-nnoremap <C-y> mTggVG"+y`Tzz
-vnoremap <C-y> mT"+y`Tzz
-
-"normalmask
-noremap H 0
-noremap L $
-noremap <C-j> 7j
-noremap <C-k> 7k
 noremap s :edit 
-noremap <C-z> :qa!
+noremap S :cd 
+nnoremap <Esc> :set invhlsearch<CR>
+nnoremap <c-z> :qa!
+nnoremap ,m :call InvMemory()<CR>
+nnoremap \] :bn<CR>
+nnoremap \[ :bp<CR>
+vnoremap <c-y> "+y
+vnoremap <c-p> "+p
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
 
-"good looking
+colorscheme waterless
+
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[2 q"
+
+au BufWinLeave * if expand("%:p") != "" && InMemory(expand("%:p")) | silent mkview
+au BufWinEnter * if expand("%:p") != "" && InMemory(expand("%:p")) | silent! loadview
+
+set fillchars=fold:\ 
 set fillchars+=vert:│
+set foldtext=Blackbox()
 
-"autocmd
-au BufWinEnter * silent! loadview
-au VimLeave,BufLeave,BufWritePost * silent! mkview
-
-"fcitx5
-"let fcitx5state=system("fcitx5-remote")
-"au InsertLeave * silent let fcitx5state=system("fcitx5-remote")[0] | silent !fcitx5-remote -c
-"au InsertEnter * silent if fcitx5state == 2 | call system("fcitx5-remote -o") | endif
-
-"ejs
-au BufNewFile,BufRead *.ejs set ft=html
-au BufNewFile,BufRead *.pde set ft=processing
-
-"pico8
-au Filetype pico8 nnoremap <buffer> <Leader>] :call Nxt(1)<CR>
-au Filetype pico8 nnoremap <buffer> <Leader>[ :call Nxt(0)<CR>
-function Nxt(f)
-    if a:f == 1
-        normal /\(-->8\n\)\@<=-ztj
-    else
-        normal ?\(-->8\n\)\@<=-nztj
+function! Blackbox()
+    let len = 55
+    let text = getline(v:foldstart)
+    if len <= strlen(text)
+        let text = strpart(text, 0, len - 5) . ".."
     endif
-    set nohlsearch
-    echo getline(line('.')-1)
+    let cur = line('.')
+    if v:foldstart <= cur && cur <= v:foldend
+        let text = '▶ ' . text . repeat(' ', max([1, len - strlen(text)]) - 2) . '█ 󱛱 ' . (v:foldend - v:foldstart + 1) . ' '
+    else
+        let text = text . repeat(' ', max([1, len - strlen(text)])) . '│  ' . (v:foldend - v:foldstart + 1) . ' '
+    endif
+    return text
 endfunction
 
-"plugin config
-if(has("win32") || has("win64") || has("win95") || has("win16"))
-    source $HOME/vimfiles/plugin.vim
-else
-    source ~/.vim/plugin.vim
-endif
-
-
-"fold
-set foldtext=MyFoldText()
-function! MyFoldText()
-	let text = substitute(getline(v:foldstart), '\s*$', '', '')
-	let text = substitute(text, '\t', '', 'g')
-    let text = substitute(text, '^ *', '', '')
-    let text = substitute(text, ' *$', '', '')
-    return '▶ ' . text . ' = ' . (v:foldend - v:foldstart + 1) . ' '
+function! Editornot()
+    if &modified
+        return '*'
+    else
+        return '●'
+    endif
 endfunction
 
-"gvim
-if(has("win32") || has("win64") || has("win95") || has("win16"))
-    set guifont=SauceCodePro_Nerd_Font:h14:cANSI
-else
-    set guifont=SauceCodePro\ Nerd\ Font\ Semibold\ 14
-endif
-set guioptions-=T
-set guioptions-=m
-set guicursor=a:blinkon0
+function! LoadMemory()
+    let s:memory_file = expand('$HOME').'/.vim/memory'
+    if filereadable(s:memory_file)
+        let s:memory = readfile(s:memory_file)
+    else
+        let s:memory = []
+    endif
+endfunction
+
+function! InMemory(filename)
+    return index(s:memory, a:filename) >= 0
+endfunction
+
+function! InvMemory()
+    let l:filename = expand("%:p")
+    if InMemory(l:filename)
+        call remove(s:memory, l:filename)
+        echo "forgot"
+    else
+        call add(s:memory, l:filename)
+        echo "marked"
+    endif
+    call writefile(s:memory, s:memory_file)
+endfunction
+
+call LoadMemory()

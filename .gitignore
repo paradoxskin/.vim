@@ -1,5 +1,4 @@
-
-.netrwhist
-view/*
-pack/local/*
-
+view
+memory
+undo/*
+!undo/.empty
