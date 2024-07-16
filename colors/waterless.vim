@@ -11,11 +11,12 @@ let s:e=166
 let s:f=131
 let s:g=178
 let s:h=180
-let s:i=236
+let s:i=241
 
 let s:red=166
 let s:blue=98
 let s:cyan=79
+let s:green=34
 
 hi clear
 
@@ -56,16 +57,16 @@ hi link Operator Keyword
 
 "event
 au ModeChanged * call ChangeEdflagColor()
+let s:palette = {
+    \'n':s:i,
+    \'i':s:cyan,
+    \'R':s:red,
+    \'v':s:blue,
+    \'':s:blue,
+    \'V':s:blue
+\}
 
 "func
 function! ChangeEdflagColor()
-    let s:palette={
-        \'n':s:i,
-        \'i':s:cyan,
-        \'R':s:red,
-        \'v':s:blue,
-        \'':s:blue,
-        \'V':s:blue
-    \}
     exec 'hi Edflag ctermfg='.get(s:palette, mode(), s:i)
 endfunction

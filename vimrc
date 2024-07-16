@@ -21,9 +21,10 @@ set noshowmode
 set signcolumn=yes
 set cursorline
 set laststatus=2
-set statusline=\ %#Edflag#%{Editornot()}%#StatusLine#\ %f\ %r
+set statusline=\ %#Edflag#%{Editornot()}%#StatusLine#\ %f%r\ %P\ %Y%=\ %{&encoding}\ \ %l,%c
 set undofile
 set undodir=~/.vim/undo
+set vop-=options
 
 noremap s :edit 
 noremap S :cd 

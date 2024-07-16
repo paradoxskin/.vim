@@ -2,3 +2,4 @@ view
 memory
 undo/*
 !undo/.empty
+.netrwhist
