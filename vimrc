@@ -56,6 +56,11 @@ set fillchars=fold:\
 set fillchars+=vert:│
 set foldtext=Blackbox()
 let g:lsp_diagnostics_enabled = 0
+let g:miniSnip_trigger = '<c-f1>'
+let g:miniSnip_complkey = '<c-x><c-f1>'
+let g:miniSnip_extends = {
+    \ 'cpp': ['c'],
+\}
 
 function! Blackbox()
     let len = 55
