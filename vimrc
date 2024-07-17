@@ -21,7 +21,7 @@ set noshowmode
 set signcolumn=yes
 set cursorline
 set laststatus=2
-set statusline=\ %#Edflag#%{Editornot()}%#StatusLine#\ %f%r\ %P\ %Y%=\ %{&encoding}\ \ %l,%c
+set statusline=%!Cleanline()
 set undofile
 set undodir=~/.vim/undo
 set vop-=options
@@ -65,12 +65,19 @@ function! Blackbox()
     return text
 endfunction
 
-function! Editornot()
-    if &modified
-        return '*'
+function! Cleanline()
+    if g:statusline_winid != win_getid()
+        let l:hl=''
     else
-        return '●'
+        let l:hl='%#Edflag#'
     endif
+    if &modified
+        let l:editflag='*'
+    else
+        let l:editflag='●'
+    endif
+    let l:otherstatus='%#StatusLine# %f%r %P %Y%= '.&encoding.' %l,%c'
+    return l:hl.' '.l:editflag.l:otherstatus
 endfunction
 
 function! LoadMemory()

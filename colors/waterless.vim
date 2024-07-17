@@ -3,7 +3,7 @@ set background=dark
 nnoremap wtf :echo synIDattr(synID(line('.'), col('.'), 1), "name")<CR>
 
 "main color
-let s:a=233
+let s:a=234
 let s:b=181
 let s:c=65
 let s:d=100
