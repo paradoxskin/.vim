@@ -22,7 +22,7 @@ hi clear
 
 "ui
 hi CursorLine cterm=None
-exec 'hi Folded ctermfg='.s:e.' ctermbg='.s:a
+hi Folded cterm=bold ctermbg=233 ctermfg=94
 exec 'hi LineNr ctermfg='.s:b
 exec 'hi CursorLineNR cterm=None ctermfg='.s:g
 exec 'hi SignColumn ctermbg='.s:a
@@ -52,6 +52,7 @@ exec 'hi Identifier cterm=bold ctermfg='.s:d
 exec 'hi Comment cterm=italic ctermfg='.s:h
 exec 'hi PreProc ctermfg='.s:e
 exec 'hi Special ctermfg='.s:f
+hi MatchParen cterm=reverse ctermbg=None
 hi link Statement Keyword
 hi link Operator Keyword
 

@@ -88,7 +88,12 @@ function! Cleanline()
     else
         let l:editflag='●'
     endif
-    let l:otherstatus='%#StatusLine# %f%r %P %Y%= '.&encoding.' %l,%c'
+    if InMemory(expand("%:p"))
+        let l:memflag='  '
+    else
+        let l:memflag=''
+    endif
+    let l:otherstatus='%#StatusLine# %f%r %P %Y'.l:memflag.'%= '.&encoding.' %l,%c'
     return l:hl.' '.l:editflag.l:otherstatus
 endfunction
 
