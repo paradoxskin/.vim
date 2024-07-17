@@ -1,4 +1,5 @@
 syntax on
+set nocompatible
 set nu
 set rnu
 set hidden
@@ -17,13 +18,12 @@ set expandtab
 set softtabstop=4
 set spr
 set ttimeoutlen=10
-set noshowmode
 set signcolumn=yes
 set cursorline
 set laststatus=2
 set statusline=%!Cleanline()
 set undofile
-set nocompatible
+set noshowmode
 set undodir=~/.vim/undo
 set vop-=options
 
@@ -47,11 +47,15 @@ let &t_EI = "\e[2 q"
 
 au BufWinLeave * if expand("%:p") != "" && InMemory(expand("%:p")) | silent mkview
 au BufWinEnter * if expand("%:p") != "" && InMemory(expand("%:p")) | silent! loadview
-au User lsp_buffer_enabled echo "start!"
+augroup lsp_install
+    au!
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
 
 set fillchars=fold:\ 
 set fillchars+=vert:│
 set foldtext=Blackbox()
+let g:lsp_diagnostics_enabled = 0
 
 function! Blackbox()
     let len = 55
@@ -61,15 +65,11 @@ function! Blackbox()
     endif
     let cur = line('.')
     if v:foldstart <= cur && cur <= v:foldend
-        let text = '▶ ' . text . repeat(' ', max([1, len - strlen(text)]) - 2) . '█ 󱛱 ' . (v:foldend - v:foldstart + 1) . ' '
+        let text = '▶ ' . text . repeat(' ', max([1, len - strlen(text)]) - 2) . '█ 󰏖 ' . (v:foldend - v:foldstart + 1) . ' '
     else
         let text = text . repeat(' ', max([1, len - strlen(text)])) . '│  ' . (v:foldend - v:foldstart + 1) . ' '
     endif
     return text
-endfunction
-
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
 endfunction
 
 function! Cleanline()
@@ -112,8 +112,30 @@ function! InvMemory()
     call writefile(s:memory, s:memory_file)
 endfunction
 
-function! Invlsp()
-    packadd vim-lsp
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> K <plug>(lsp-hover)
+    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
 endfunction
 
 call LoadMemory()
+
+" python c/c++ rust go java html js lua
+if executable('pylsp')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pylsp',
+        \ 'cmd': {server_info->['pylsp']},
+        \ 'allowlist': ['python'],
+        \ })
+endif
+
+if executable('clangd')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'clangd',
+        \ 'cmd': {server_info->['clangd']},
+        \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp'],
+        \ })
+endif
