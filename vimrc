@@ -23,6 +23,7 @@ set cursorline
 set laststatus=2
 set statusline=%!Cleanline()
 set undofile
+set nocompatible
 set undodir=~/.vim/undo
 set vop-=options
 
@@ -33,6 +34,7 @@ nnoremap <c-z> :qa!
 nnoremap ,m :call InvMemory()<CR>
 nnoremap \] :bn<CR>
 nnoremap \[ :bp<CR>
+nnoremap \\ :doautocmd User lsp_buffer_enabled<CR>
 vnoremap <c-y> "+y
 vnoremap <c-p> "+p
 vnoremap J :m '>+1<CR>gv=gv
@@ -45,6 +47,7 @@ let &t_EI = "\e[2 q"
 
 au BufWinLeave * if expand("%:p") != "" && InMemory(expand("%:p")) | silent mkview
 au BufWinEnter * if expand("%:p") != "" && InMemory(expand("%:p")) | silent! loadview
+au User lsp_buffer_enabled echo "start!"
 
 set fillchars=fold:\ 
 set fillchars+=vert:│
@@ -63,6 +66,10 @@ function! Blackbox()
         let text = text . repeat(' ', max([1, len - strlen(text)])) . '│  ' . (v:foldend - v:foldstart + 1) . ' '
     endif
     return text
+endfunction
+
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
 endfunction
 
 function! Cleanline()
@@ -103,6 +110,10 @@ function! InvMemory()
         echo "marked"
     endif
     call writefile(s:memory, s:memory_file)
+endfunction
+
+function! Invlsp()
+    packadd vim-lsp
 endfunction
 
 call LoadMemory()
