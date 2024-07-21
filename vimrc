@@ -31,10 +31,9 @@ noremap s :edit
 noremap S :cd 
 nnoremap <Esc> :set invhlsearch<CR>
 nnoremap <c-z> :qa!
-nnoremap ,m :call InvMemory()<CR>
+nnoremap \\ :call InvMemory()<CR>
 nnoremap \] :bn<CR>
 nnoremap \[ :bp<CR>
-nnoremap \\ :doautocmd User lsp_buffer_enabled<CR>
 vnoremap <c-y> "+y
 vnoremap <c-p> "+p
 vnoremap J :m '>+1<CR>gv=gv
@@ -114,10 +113,8 @@ function! InvMemory()
     let l:filename = expand("%:p")
     if InMemory(l:filename)
         call remove(s:memory, l:filename)
-        echo "forgot"
     else
         call add(s:memory, l:filename)
-        echo "marked"
     endif
     call writefile(s:memory, s:memory_file)
 endfunction
