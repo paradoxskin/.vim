@@ -26,6 +26,7 @@ set undofile
 set noshowmode
 set undodir=~/.vim/undo
 set vop-=options
+set gp=git\ grep\ -n
 
 noremap s :edit 
 noremap S :cd 
@@ -34,6 +35,10 @@ nnoremap <c-z> :qa!
 nnoremap \\ :call InvMemory()<CR>
 nnoremap \] :bn<CR>
 nnoremap \[ :bp<CR>
+nnoremap \= :cn<CR>zz
+nnoremap \- :cp<CR>zz
+nnoremap <silent> \<bs> :call ToggleQuickFix()<CR>
+nnoremap \<cr> :Lex<CR>
 vnoremap <c-y> "+y
 vnoremap <c-p> "+p
 vnoremap J :m '>+1<CR>gv=gv
@@ -43,9 +48,13 @@ colorscheme waterless
 
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_winsize = 20
 
 au BufWinLeave * if expand("%:p") != "" && InMemory(expand("%:p")) | silent mkview
 au BufWinEnter * if expand("%:p") != "" && InMemory(expand("%:p")) | silent! loadview
+au filetype netrw call Netrw_mappings()
 augroup lsp_install
     au!
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
@@ -128,6 +137,18 @@ function! s:on_lsp_buffer_enabled() abort
     nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
 endfunction
 
+function! ToggleQuickFix()
+    if empty(filter(getwininfo(), 'v:val.quickfix'))
+        copen
+    else
+        cclose
+    endif
+endfunction
+
+function! Netrw_mappings()
+    nmap <buffer> h -zz
+    nmap <buffer> l zz<CR>
+endfunction
 call LoadMemory()
 
 " python c/c++ rust go java html js lua
