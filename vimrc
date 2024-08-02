@@ -1,4 +1,5 @@
 syntax on
+filetype plugin on
 set nocompatible
 set nu
 set rnu
@@ -101,7 +102,8 @@ function! Cleanline()
     else
         let l:memflag=''
     endif
-    let l:otherstatus='%#StatusLine# %f%r %P %Y'.l:memflag.'%= '.&encoding.' %l,%c'
+    let l:functionname = ShowFuncName()
+    let l:otherstatus='%#StatusLine# %f%r %P %Y'.l:memflag.'%= '.l:functionname.'|'.&encoding.' %l,%c'
     return l:hl.' '.l:editflag.l:otherstatus
 endfunction
 
@@ -149,6 +151,22 @@ function! Netrw_mappings()
     nmap <buffer> h -zz
     nmap <buffer> l zz<CR>
 endfunction
+
+function! ShowFuncName()
+    let l:lnum = line(".")
+    let l:col = col(".")
+    echohl ModeMsg
+    let l:lno = search("^[^ \t#/]\\{2}.*[^:]\s*$", 'bW')
+    if l:lnum != l:lno
+        let l:name = strpart(getline(lno), 0, 64)
+    else
+        let l:name = ""
+    endif
+    echohl None
+    call search("\\%" . lnum . "l" . "\\%" . col . "c")
+    return name
+endfunction
+
 call LoadMemory()
 
 " python c/c++ rust go java html js lua
