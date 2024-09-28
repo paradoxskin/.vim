@@ -25,9 +25,11 @@ set laststatus=2
 set statusline=%!Cleanline()
 set undofile
 set noshowmode
+set showcmd
 set undodir=~/.vim/undo
 set vop-=options
 set gp=git\ grep\ -n
+set list lcs=tab:\|\ 
 
 noremap s :edit 
 noremap S :cd 
@@ -153,18 +155,19 @@ function! Netrw_mappings()
 endfunction
 
 function! ShowFuncName()
-    let l:lnum = line(".")
-    let l:col = col(".")
-    echohl ModeMsg
-    let l:lno = search("^[^ \t#/]\\{2}.*[^:]\s*$", 'bW')
-    if l:lnum != l:lno
-        let l:name = strpart(getline(lno), 0, 64)
-    else
-        let l:name = ""
-    endif
-    echohl None
-    call search("\\%" . lnum . "l" . "\\%" . col . "c")
-    return name
+    "let l:lnum = line(".")
+    "let l:col = col(".")
+    "echohl ModeMsg
+    "let l:lno = search("^[^ \t#/]\\{2}.*[^:]\s*$", 'bW')
+    "if l:lnum != l:lno
+    "    let l:name = strpart(getline(lno), 0, 64)
+    "else
+    "    let l:name = ""
+    "endif
+    "echohl None
+    "call search("\\%" . lnum . "l" . "\\%" . col . "c")
+    "return name
+    return ""
 endfunction
 
 call LoadMemory()
@@ -184,4 +187,16 @@ if executable('clangd')
         \ 'cmd': {server_info->['clangd', '--header-insertion=never']},
         \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp'],
         \ })
+endif
+
+if executable('cmake-language-server')
+  au User lsp_setup call lsp#register_server({
+  \ 'name': 'cmake',
+  \ 'cmd': {server_info->['cmake-language-server']},
+  \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'build/'))},
+  \ 'whitelist': ['cmake'],
+  \ 'initialization_options': {
+  \   'buildDirectory': 'build',
+  \ }
+  \})
 endif

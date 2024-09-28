@@ -1,6 +1,6 @@
 set t_Co=256
 set background=dark
-nnoremap wtf :echo synIDattr(synID(line('.'), col('.'), 1), "name")<CR>
+"nnoremap wtf :echo synIDattr(synID(line('.'), col('.'), 1), "name")<CR>
 
 "main color
 let s:a=234
@@ -40,6 +40,7 @@ exec 'hi Pmenu cterm=bold ctermfg='.s:i.' ctermbg='.s:a
 exec 'hi PmenuSbar ctermbg='.s:a
 exec 'hi PmenuSel cterm=bold ctermfg='.s:c
 exec 'hi PmenuThumb ctermbg='.s:i
+exec 'hi SpecialKey cterm=bold ctermfg='.s:i
 
 "lang
 hi clear Statement
