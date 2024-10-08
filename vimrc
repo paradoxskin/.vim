@@ -26,6 +26,7 @@ set statusline=%!Cleanline()
 set undofile
 set noshowmode
 set showcmd
+set sloc=statusline
 set undodir=~/.vim/undo
 set vop-=options
 set gp=git\ grep\ -n
@@ -36,16 +37,17 @@ noremap S :cd
 nnoremap <Esc> :set invhlsearch<CR>
 nnoremap <c-z> :qa!
 nnoremap \\ :call InvMemory()<CR>
-nnoremap \] :bn<CR>
-nnoremap \[ :bp<CR>
-nnoremap \= :cn<CR>zz
-nnoremap \- :cp<CR>zz
-nnoremap <silent> \<bs> :call ToggleQuickFix()<CR>
-nnoremap \<cr> :Lex<CR>
+nnoremap \s :call JumpToNormalBuffer("bn")<CR>
+nnoremap \a :call JumpToNormalBuffer("bp")<CR>
+nnoremap \w :cn<CR>zz
+nnoremap \q :cp<CR>zz
+nnoremap <silent> \<cr> :call ToggleQuickFix()<CR>
+nnoremap \] :Lex<CR>
 vnoremap <c-y> "+y
 vnoremap <c-p> "+p
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+cnoremap <c-f1> %:p:h
 
 colorscheme waterless
 
@@ -57,7 +59,8 @@ let g:netrw_winsize = 20
 
 au BufWinLeave * if expand("%:p") != "" && InMemory(expand("%:p")) | silent mkview
 au BufWinEnter * if expand("%:p") != "" && InMemory(expand("%:p")) | silent! loadview
-au filetype netrw call Netrw_mappings()
+au filetype netrw call s:netrw_config()
+au filetype qf call s:quickfix_config()
 augroup lsp_install
     au!
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
@@ -104,8 +107,7 @@ function! Cleanline()
     else
         let l:memflag=''
     endif
-    let l:functionname = ShowFuncName()
-    let l:otherstatus='%#StatusLine# %f%r %P %Y'.l:memflag.'%= '.l:functionname.'|'.&encoding.' %l,%c'
+    let l:otherstatus='%#StatusLine# %f%r %P %Y'.l:memflag.'~ %S'.'%=|'.&encoding.' %l,%c'
     return l:hl.' '.l:editflag.l:otherstatus
 endfunction
 
@@ -141,33 +143,41 @@ function! s:on_lsp_buffer_enabled() abort
     nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
 endfunction
 
+function! s:netrw_config()
+    map <buffer> \a <nop>
+    map <buffer> \s <nop>
+    nmap <buffer> h -zz
+    nmap <buffer> l zz<CR>
+    setlocal statusline=\ ●\ %{&ft}
+endfunction
+
+function! s:quickfix_config()
+    map <buffer> \a <nop>
+    map <buffer> \s <nop>
+    nmap <buffer> <space> <cr>zz<c-w>p
+endfunction
+
 function! ToggleQuickFix()
     if empty(filter(getwininfo(), 'v:val.quickfix'))
-        copen
+        if empty(getqflist())
+            let new_quickfix = input("", ":grep ")
+            if new_quickfix != ":grep "
+                exe new_quickfix
+            endif
+        else
+            copen
+        endif
     else
         cclose
     endif
 endfunction
 
-function! Netrw_mappings()
-    nmap <buffer> h -zz
-    nmap <buffer> l zz<CR>
-endfunction
-
-function! ShowFuncName()
-    "let l:lnum = line(".")
-    "let l:col = col(".")
-    "echohl ModeMsg
-    "let l:lno = search("^[^ \t#/]\\{2}.*[^:]\s*$", 'bW')
-    "if l:lnum != l:lno
-    "    let l:name = strpart(getline(lno), 0, 64)
-    "else
-    "    let l:name = ""
-    "endif
-    "echohl None
-    "call search("\\%" . lnum . "l" . "\\%" . col . "c")
-    "return name
-    return ""
+function! JumpToNormalBuffer(command)
+    let l:now_buf = bufnr('%')
+    exec a:command
+    while &bt != "" && bufnr('%') != l:now_buf
+        exec a:command
+    endwhile
 endfunction
 
 call LoadMemory()
