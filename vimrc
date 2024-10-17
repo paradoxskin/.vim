@@ -34,6 +34,10 @@ set list lcs=tab:\|\
 
 noremap s :edit 
 noremap S :cd 
+nnoremap <up> <c-w>k
+nnoremap <down> <c-w>j
+nnoremap <right> <c-w>l
+nnoremap <left> <c-w>h
 nnoremap <Esc> :set invhlsearch<CR>
 nnoremap <c-z> :qa!
 nnoremap \\ :call InvMemory()<CR>
@@ -43,6 +47,8 @@ nnoremap \w :cn<CR>zz
 nnoremap \q :cp<CR>zz
 nnoremap <silent> \<cr> :call ToggleQuickFix()<CR>
 nnoremap \] :Lex<CR>
+" use OSC52, only support yank, paste by <ctrl-shift V> in insert mode
+"vnoremap <c-y> "my:call OSC52('m')<CR>
 vnoremap <c-y> "+y
 vnoremap <c-p> "+p
 vnoremap J :m '>+1<CR>gv=gv
@@ -103,11 +109,11 @@ function! Cleanline()
         let l:editflag='●'
     endif
     if InMemory(expand("%:p"))
-        let l:memflag='  '
+        let l:memflag=' '
     else
         let l:memflag=''
     endif
-    let l:otherstatus='%#StatusLine# %f%r %P %Y'.l:memflag.'~ %S'.'%=|'.&encoding.' %l,%c'
+    let l:otherstatus='%#StatusLine# %f%r %P %Y '.l:memflag.'~ %S'.'%=|'.&encoding.' %l,%c'
     return l:hl.' '.l:editflag.l:otherstatus
 endfunction
 
@@ -155,6 +161,16 @@ function! s:quickfix_config()
     map <buffer> \a <nop>
     map <buffer> \s <nop>
     nmap <buffer> <space> <cr>zz<c-w>p
+endfunction
+
+function! OSC52(reg)
+    let tmp_fn = system("mktemp")[:-2]
+    let ret = writefile(split(getreg(a:reg), "\n"), tmp_fn, "b")
+    if ret == 0
+        exec "!cat ".tmp_fn." |osc52 && rm ".tmp_fn." || echo ".tmp_fn
+        return
+    endif
+    echo ret
 endfunction
 
 function! ToggleQuickFix()
