@@ -1,0 +1,11 @@
+? library
+cmake_minimum_required(VERSION 3.5)
+
+set(SOURCE_FILES
+    # @@^TODO
+    <{+}>
+)
+
+add_library(<{lib_name}> <{STATIC}> ${SOURCE_FILES})
+
+target_include_directories(<{~1}> <{PUBLIC}> ${CMAKE_CURRENT_SOURCE_DIR}/src)

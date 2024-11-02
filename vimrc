@@ -32,8 +32,8 @@ set vop-=options
 set gp=git\ grep\ -n
 set list lcs=tab:\|\ 
 
-noremap s :edit 
-noremap S :cd 
+nnoremap s :edit 
+nnoremap S :cd 
 nnoremap <up> <c-w>k
 nnoremap <down> <c-w>j
 nnoremap <right> <c-w>l
@@ -76,6 +76,7 @@ set fillchars=fold:\
 set fillchars+=vert:│
 set foldtext=Blackbox()
 let g:lsp_diagnostics_enabled = 0
+let g:lsp_document_code_action_signs_enabled = 0
 let g:miniSnip_trigger = '<c-f1>'
 let g:miniSnip_complkey = '<c-x><c-f1>'
 let g:miniSnip_extends = {
@@ -144,9 +145,13 @@ function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     nmap <buffer> gd <plug>(lsp-definition)
     nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
     nmap <buffer> K <plug>(lsp-hover)
-    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
-    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
+    nnoremap <buffer> <expr><c-j> lsp#scroll(+1)
+    nnoremap <buffer> <expr><c-k> lsp#scroll(-1)
 endfunction
 
 function! s:netrw_config()
@@ -198,7 +203,7 @@ endfunction
 
 call LoadMemory()
 
-" python c/c++ rust go java html js lua
+" python c/c++ rust go java html js lua pico8 cmake
 if executable('pylsp')
     au User lsp_setup call lsp#register_server({
         \ 'name': 'pylsp',
