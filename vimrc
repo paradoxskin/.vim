@@ -30,7 +30,8 @@ set sloc=statusline
 set undodir=~/.vim/undo
 set vop-=options
 set gp=git\ grep\ -n
-set list lcs=tab:\|\ 
+set list lcs=tab:\|\ ,extends:>,precedes:<
+set cot=menu,preview
 
 nnoremap s :edit 
 nnoremap S :cd 
@@ -39,7 +40,7 @@ nnoremap <down> <c-w>j
 nnoremap <right> <c-w>l
 nnoremap <left> <c-w>h
 nnoremap <Esc> :set invhlsearch<CR>
-nnoremap <c-z> :qa!
+nnoremap <c-a> :qa!
 nnoremap \\ :call InvMemory()<CR>
 nnoremap \s :call JumpToNormalBuffer("bn")<CR>
 nnoremap \a :call JumpToNormalBuffer("bp")<CR>
@@ -47,6 +48,8 @@ nnoremap \w :cn<CR>zz
 nnoremap \q :cp<CR>zz
 nnoremap <silent> \<cr> :call ToggleQuickFix()<CR>
 nnoremap \] :Lex<CR>
+nnoremap \[ :Lex %:p:h<CR>
+nnoremap \<bs> :set invpaste<CR>
 " use OSC52, only support yank, paste by <ctrl-shift V> in insert mode
 "vnoremap <c-y> "my:call OSC52('m')<CR>
 vnoremap <c-y> "+y
@@ -82,6 +85,7 @@ let g:miniSnip_complkey = '<c-x><c-f1>'
 let g:miniSnip_extends = {
     \ 'cpp': ['c'],
 \}
+let s:quickpeek = expand("<sfile>:p:h") . "/quickpeek"
 
 function! Blackbox()
     let len = 55
@@ -114,7 +118,7 @@ function! Cleanline()
     else
         let l:memflag=''
     endif
-    let l:otherstatus='%#StatusLine# %f%r %P %Y '.l:memflag.'~ %S'.'%=|'.&encoding.' %l,%c'
+    let l:otherstatus='%#StatusLine# %f%r %P %Y '.l:memflag.'~ %S'.'%=|'.&encoding.' %l,%c|'
     return l:hl.' '.l:editflag.l:otherstatus
 endfunction
 
@@ -139,6 +143,15 @@ function! InvMemory()
         call add(s:memory, l:filename)
     endif
     call writefile(s:memory, s:memory_file)
+endfunction
+
+function! PeekAdd()
+    let l:path = [expand("%:p") . ":" . line(".") . ":" . substitute(input("", "note: "), "note:", "", "")]
+    call writefile(l:path, s:quickpeek, "a")
+endfunction
+
+function! PeekList()
+    exe "cfile " . s:quickpeek
 endfunction
 
 function! s:on_lsp_buffer_enabled() abort
@@ -215,7 +228,7 @@ endif
 if executable('clangd')
     au User lsp_setup call lsp#register_server({
         \ 'name': 'clangd',
-        \ 'cmd': {server_info->['clangd', '--header-insertion=never']},
+        \ 'cmd': {server_info->['clangd', '--header-insertion=never', '--backgound-index']},
         \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp'],
         \ })
 endif
