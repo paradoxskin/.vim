@@ -32,6 +32,12 @@ set vop-=options
 set gp=git\ grep\ -n
 set list lcs=tab:\|\ ,extends:>,precedes:<
 set cot=menu,preview
+set jop=stack
+set splitbelow
+set splitright
+
+inoremap jf <esc>
+nnoremap ` :
 
 nnoremap s :edit 
 nnoremap S :cd 
@@ -40,7 +46,7 @@ nnoremap <down> <c-w>j
 nnoremap <right> <c-w>l
 nnoremap <left> <c-w>h
 nnoremap <Esc> :set invhlsearch<CR>
-nnoremap <c-a> :qa!
+nnoremap <c-c> :qa!
 nnoremap \\ :call InvMemory()<CR>
 nnoremap \s :call JumpToNormalBuffer("bn")<CR>
 nnoremap \a :call JumpToNormalBuffer("bp")<CR>
@@ -50,6 +56,7 @@ nnoremap <silent> \<cr> :call ToggleQuickFix()<CR>
 nnoremap \] :Lex<CR>
 nnoremap \[ :Lex %:p:h<CR>
 nnoremap \<bs> :set invpaste<CR>
+nnoremap \= :set invwrap<CR>
 " use OSC52, only support yank, paste by <ctrl-shift V> in insert mode
 "vnoremap <c-y> "my:call OSC52('m')<CR>
 vnoremap <c-y> "+y
@@ -105,21 +112,22 @@ endfunction
 function! Cleanline()
     if g:statusline_winid != win_getid()
         let l:hl=''
+        let l:editflag=' '
     else
         let l:hl='%#Edflag#'
-    endif
-    if &modified
-        let l:editflag='*'
-    else
-        let l:editflag='●'
+        if &modified
+            let l:editflag='@'
+        else
+            let l:editflag='●'
+        endif
     endif
     if InMemory(expand("%:p"))
         let l:memflag=' '
     else
         let l:memflag=''
     endif
-    let l:otherstatus='%#StatusLine# %f%r %P %Y '.l:memflag.'~ %S'.'%=|'.&encoding.' %l,%c|'
-    return l:hl.' '.l:editflag.l:otherstatus
+    let l:otherstatus='%#StatusLine#%f%r %P %Y '.l:memflag.'~ %S'.'%=|'.&encoding.' %l,%c|'
+    return l:hl.' '.l:editflag.' '.l:otherstatus
 endfunction
 
 function! LoadMemory()
@@ -228,7 +236,7 @@ endif
 if executable('clangd')
     au User lsp_setup call lsp#register_server({
         \ 'name': 'clangd',
-        \ 'cmd': {server_info->['clangd', '--header-insertion=never', '--backgound-index']},
+        \ 'cmd': {server_info->['clangd', '--header-insertion=never']},
         \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp'],
         \ })
 endif

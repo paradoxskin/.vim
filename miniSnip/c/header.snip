@@ -1,7 +1,19 @@
 ? header
-#ifndef <{HEADER_NAME}>
+#ifndef <{_HEADER_NAME_}>
 #define <{~1}>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+
 <{+}>
+
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

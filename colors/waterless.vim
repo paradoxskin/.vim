@@ -53,7 +53,8 @@ exec 'hi Identifier cterm=bold ctermfg='.s:d
 exec 'hi Comment cterm=italic ctermfg='.s:h
 exec 'hi PreProc ctermfg='.s:e
 exec 'hi Special ctermfg='.s:f
-hi MatchParen cterm=reverse ctermbg=None
+exec 'hi MatchParen ctermfg='.s:h.' ctermbg='.s:i
+"hi MatchParen cterm=reverse ctermbg=None
 hi link Statement Keyword
 hi link Operator Keyword
 
