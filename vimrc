@@ -222,7 +222,21 @@ function! JumpToNormalBuffer(command)
     endwhile
 endfunction
 
+function! ReadBook(command)
+    let l:content = getline(".")
+    let l:begin = match(l:content, "|")
+    if l:begin == -1
+        return
+    endif
+    call system(a:command, l:content[l:begin+1:])
+endfunction
+
 call LoadMemory()
+
+" lazybook
+if executable('sd')
+    au BufRead,BufNewFile *.lazybook setlocal ft=sh | nnoremap <cr> :call ReadBook("sd")<cr>
+endif
 
 " python c/c++ rust go java html js lua pico8 cmake
 if executable('pylsp')
