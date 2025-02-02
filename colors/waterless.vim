@@ -58,6 +58,24 @@ exec 'hi MatchParen ctermfg='.s:h.' ctermbg='.s:i
 hi link Statement Keyword
 hi link Operator Keyword
 
+"mark search
+exec 'hi MarkSearchx0 cterm=bold ctermbg=202 ctermfg='.s:a
+exec 'hi MarkSearchx1 cterm=bold ctermbg=214 ctermfg='.s:a
+exec 'hi MarkSearchx2 cterm=bold ctermbg=208 ctermfg='.s:a
+exec 'hi MarkSearchx3 cterm=bold ctermbg=106 ctermfg='.s:a
+exec 'hi MarkSearchx4 cterm=bold ctermbg=171 ctermfg='.s:a
+exec 'hi MarkSearchx5 cterm=bold ctermbg=183 ctermfg='.s:a
+exec 'hi MarkSearchx6 cterm=bold ctermbg=220 ctermfg='.s:a
+exec 'hi MarkSearchx7 cterm=bold ctermbg=218 ctermfg='.s:a
+exec 'hi MarkSearchx8 cterm=bold ctermbg=226 ctermfg='.s:a
+exec 'hi MarkSearchx9 cterm=bold ctermbg=146 ctermfg='.s:a
+exec 'hi MarkSearchx10 cterm=bold ctermbg=177 ctermfg='.s:a
+exec 'hi MarkSearchx11 cterm=bold ctermbg=189 ctermfg='.s:a
+exec 'hi MarkSearchx12 cterm=bold ctermbg=195 ctermfg='.s:a
+exec 'hi MarkSearchx13 cterm=bold ctermbg=110 ctermfg='.s:a
+exec 'hi MarkSearchx14 cterm=bold ctermbg=118 ctermfg='.s:a
+exec 'hi MarkSearchx15 cterm=bold ctermbg=122 ctermfg='.s:a
+
 "event
 au ModeChanged * call ChangeEdflagColor()
 let s:palette = {

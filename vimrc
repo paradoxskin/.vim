@@ -36,7 +36,7 @@ set jop=stack
 set splitbelow
 set splitright
 
-inoremap jf <esc>
+inoremap<silent><expr> <C-L> i1m#Toggle()
 nnoremap ` :
 
 nnoremap s :edit 
@@ -57,6 +57,8 @@ nnoremap \] :Lex<CR>
 nnoremap \[ :Lex %:p:h<CR>
 nnoremap \<bs> :set invpaste<CR>
 nnoremap \= :set invwrap<CR>
+nnoremap \/ :call MarkSearch()<CR>
+nnoremap \? :call ClearMarkSearch()<CR>
 " use OSC52, only support yank, paste by <ctrl-shift V> in insert mode
 "vnoremap <c-y> "my:call OSC52('m')<CR>
 vnoremap <c-y> "+y
@@ -126,8 +128,13 @@ function! Cleanline()
     else
         let l:memflag=''
     endif
+    if !exists("b:chineseMode") || !b:chineseMode
+        let l:cnflag=' '
+    else
+        let l:cnflag='%#SpellRare# '
+    endif
     let l:otherstatus='%#StatusLine#%f%r %P %Y '.l:memflag.'~ %S'.'%=|'.&encoding.' %l,%c|'
-    return l:hl.' '.l:editflag.' '.l:otherstatus
+    return l:hl.' '.l:editflag.l:cnflag.l:otherstatus
 endfunction
 
 function! LoadMemory()
@@ -235,8 +242,90 @@ call LoadMemory()
 
 " lazybook
 if executable('sd')
-    au BufRead,BufNewFile *.lazybook setlocal ft=sh | nnoremap <cr> :call ReadBook("sd")<cr>
+    au BufRead,BufNewFile *.lazybook setlocal ft=sh | nnoremap <cr> :call ReadBook("sd")<cr> | set invwrap
 endif
+
+" marksearch
+if !exists("s:match_dict")
+    let s:match_dict = []
+    let s:match_col = 0
+endif
+
+function! MarkSearch()
+    for rule in s:match_dict
+        if @/ == rule[1]
+            return
+        endif
+    endfor
+    let l:id = matchadd("MarkSearchx".s:match_col, @/)
+    call add(s:match_dict, [l:id, @/])
+    let s:match_col = (s:match_col + 1) % 0xf
+endfunction
+
+function! ClearMarkSearch()
+    let l:count = 1
+    let l:choice = []
+    for match in s:match_dict
+        call add(l:choice, (l:count.". ".match[1]))
+        let l:count += 1
+    endfor
+    let l:input = inputlist(l:choice)
+    if l:input != 0 && l:input <= len(s:match_dict)
+        call matchdelete(s:match_dict[l:input - 1][0])
+    endif
+endfunction
+
+function! s:gitDiffQf(content)
+    let l:lines = split(a:content, '\n')
+    let l:qflist = []
+    let l:nr = 0
+    let l:filename = 'gitdiff'
+    for line in l:lines
+        let l:normal = 1
+        if line =~ '^+++ '
+            let l:filename = matchlist(line, '^+++ b/\(.*\)')[1]
+        elseif line =~ '^--- ' "ignore
+        elseif line =~ '^@@ '
+            let l:nr = matchlist(line, '^@@.*+\(.*\),.*@@')[1] - 2
+        elseif line =~ '^+'
+            let l:normal = 0
+        elseif line =~ '^-'
+            let l:nr -= 1
+        endif
+        let l:nr += 1
+        if l:normal
+            call add(l:qflist, {'text': line})
+        else
+            call add(l:qflist, {'filename': l:filename, 'lnum': l:nr, 'text': line})
+        endif
+    endfor
+    return l:qflist
+endfunction
+
+" cmd_quickfix
+if !exists("s:cmd_qf_handle")
+    let s:cmd_qf_handle = [
+    \   ['git_diff', function('s:gitDiffQf')],
+    \]
+endif
+
+function! CommandQf()
+    let l:cmd = input("CMD: ")
+    let l:output = system(l:cmd)
+    let l:idx = 0
+    let l:choice = []
+    for qf_handle in s:cmd_qf_handle
+        let l:idx += 1
+        call add(l:choice, l:idx.". ".qf_handle[0])
+    endfor
+    redraw!
+    let l:input = inputlist(l:choice)
+    if 0 < l:input && l:input <= len(s:cmd_qf_handle)
+        let l:qflist = s:cmd_qf_handle[l:input - 1][1](l:output)
+        call setqflist(l:qflist, "r")
+        copen
+    endif
+endfunction
 
 " python c/c++ rust go java html js lua pico8 cmake
 if executable('pylsp')

@@ -4,3 +4,6 @@
 [submodule "plugins/miniSnip"]
 	path = plugins/miniSnip
 	url = https://github.com/paradoxskin/miniSnip.git
+[submodule "plugins/i1m"]
+	path = plugins/i1m
+	url = https://github.com/paradoxskin/i1m.git
