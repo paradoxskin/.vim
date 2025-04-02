@@ -36,8 +36,9 @@ set jop=stack
 set splitbelow
 set splitright
 
-inoremap<silent><expr> <C-L> i1m#Toggle()
-nnoremap ` :
+inoremap<silent><expr> <up> i1m#Toggle()
+nnoremap <space> :
+vnoremap <space> :
 
 nnoremap s :edit 
 nnoremap S :cd 
@@ -89,12 +90,24 @@ set fillchars+=vert:│
 set foldtext=Blackbox()
 let g:lsp_diagnostics_enabled = 0
 let g:lsp_document_code_action_signs_enabled = 0
+let g:lsp_document_highlight_enabled = 0
+let g:lsp_semantic_enabled = 1
 let g:miniSnip_trigger = '<c-f1>'
 let g:miniSnip_complkey = '<c-x><c-f1>'
 let g:miniSnip_extends = {
     \ 'cpp': ['c'],
 \}
 let s:quickpeek = expand("<sfile>:p:h") . "/quickpeek"
+
+nnoremap \m :call InvLspDocHl()<CR>
+function! InvLspDocHl()
+    let g:lsp_document_highlight_enabled = xor(g:lsp_document_highlight_enabled, 1)
+    if g:lsp_document_highlight_enabled == 1
+        call lsp#internal#document_highlight#_enable()
+    else
+        call lsp#internal#document_highlight#_disable()
+    endif
+endfunction
 
 function! Blackbox()
     let len = 55
@@ -246,32 +259,31 @@ if executable('sd')
 endif
 
 " marksearch
-if !exists("s:match_dict")
-    let s:match_dict = []
-    let s:match_col = 0
-endif
-
 function! MarkSearch()
-    for rule in s:match_dict
+    if !exists("w:match_dict")
+        let w:match_dict = []
+        let w:match_col = 0
+    endif
+    for rule in w:match_dict
         if @/ == rule[1]
             return
         endif
     endfor
-    let l:id = matchadd("MarkSearchx".s:match_col, @/)
-    call add(s:match_dict, [l:id, @/])
-    let s:match_col = (s:match_col + 1) % 0xf
+    let l:id = matchadd("MarkSearchx".w:match_col, @/)
+    call add(w:match_dict, [l:id, @/])
+    let w:match_col = (w:match_col + 1) % 0xf
 endfunction
 
 function! ClearMarkSearch()
     let l:count = 1
     let l:choice = []
-    for match in s:match_dict
+    for match in w:match_dict
         call add(l:choice, (l:count.". ".match[1]))
         let l:count += 1
     endfor
     let l:input = inputlist(l:choice)
-    if l:input != 0 && l:input <= len(s:match_dict)
-        call matchdelete(s:match_dict[l:input - 1][0])
+    if l:input != 0 && l:input <= len(w:match_dict)
+        call matchdelete(w:match_dict[l:input - 1][0])
     endif
 endfunction
 
@@ -339,7 +351,7 @@ endif
 if executable('clangd')
     au User lsp_setup call lsp#register_server({
         \ 'name': 'clangd',
-        \ 'cmd': {server_info->['clangd', '--header-insertion=never']},
+        \ 'cmd': {server_info->['clangd', '--header-insertion=never', '--enable-config']},
         \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp'],
         \ })
 endif
