@@ -191,6 +191,7 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> gs <plug>(lsp-document-symbol-search)
     nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
     nmap <buffer> K <plug>(lsp-hover)
+    nmap <silent> <buffer> <C-x> <plug>(lsp-float-close)
     nnoremap <buffer> <expr><c-j> lsp#scroll(+1)
     nnoremap <buffer> <expr><c-k> lsp#scroll(-1)
 endfunction
