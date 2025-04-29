@@ -75,6 +75,10 @@ exec 'hi MarkSearchx13 cterm=bold ctermbg=110 ctermfg='.s:black
 exec 'hi MarkSearchx14 cterm=bold ctermbg=118 ctermfg='.s:black
 exec 'hi MarkSearchx15 cterm=bold ctermbg=122 ctermfg='.s:black
 
+"syntax
+let c_space_errors = 1
+let c_no_curly_error = 1
+
 "event
 au ModeChanged * call ChangeEdflagColor()
 let s:palette = {
@@ -83,7 +87,9 @@ let s:palette = {
     \'R':s:red,
     \'v':s:purple,
     \'':s:purple,
-    \'V':s:purple
+    \'V':s:purple,
+    \'s':s:red,
+    \'S':s:red,
 \}
 
 "func

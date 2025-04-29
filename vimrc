@@ -39,6 +39,7 @@ set splitright
 inoremap<silent><expr> <up> i1m#Toggle()
 nnoremap <space> :
 vnoremap <space> :
+nnoremap ` @
 
 nnoremap s :edit 
 nnoremap S :cd 
@@ -66,7 +67,9 @@ vnoremap <c-y> "+y
 vnoremap <c-p> "+p
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+vnoremap * "my/\V<c-r>m
 cnoremap <c-f1> %:p:h
+snoremap <c-x> _<bs><c-x>
 
 colorscheme waterless
 
@@ -186,14 +189,16 @@ function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     nmap <buffer> gd <plug>(lsp-definition)
     nmap <buffer> gr <plug>(lsp-references)
-    nmap <buffer> gi <plug>(lsp-implementation)
-    nmap <buffer> gt <plug>(lsp-type-definition)
     nmap <buffer> gs <plug>(lsp-document-symbol-search)
     nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gt <plug>(lsp-call-hierarchy-incoming)
     nmap <buffer> K <plug>(lsp-hover)
-    nmap <silent> <buffer> <C-x> <plug>(lsp-float-close)
     nnoremap <buffer> <expr><c-j> lsp#scroll(+1)
     nnoremap <buffer> <expr><c-k> lsp#scroll(-1)
+    vmap <silent> <buffer> <nop> <plug>(lsp-float-close)
+    vmap <silent> <buffer> <nop> <plug>(lsp-quickpick-cancel)
+    vmap <silent> <buffer> <nop> <Plug>(lsp-quickpick-move-next)
+    vmap <silent> <buffer> <nop> <Plug>(lsp-quickpick-move-previous)
 endfunction
 
 function! s:netrw_config()
@@ -256,7 +261,8 @@ call LoadMemory()
 
 " lazybook
 if executable('sd')
-    au BufRead,BufNewFile *.lazybook setlocal ft=sh | nnoremap <cr> :call ReadBook("sd")<cr> | set invwrap
+    au BufRead,BufNewFile *.lazybook setfiletype lazybook
+    au FileType lazybook setlocal ft=sh | nnoremap <buffer> <cr> :call ReadBook("sd")<cr> | nnoremap <buffer> / /^| set invwrap
 endif
 
 " marksearch
@@ -285,6 +291,7 @@ function! ClearMarkSearch()
     let l:input = inputlist(l:choice)
     if l:input != 0 && l:input <= len(w:match_dict)
         call matchdelete(w:match_dict[l:input - 1][0])
+        call remove(w:match_dict, (l:input - 1))
     endif
 endfunction
 
