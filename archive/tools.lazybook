@@ -1,0 +1,12 @@
+# local patch
+0|'git stash -u' c-m
+1|'git stash show 0 -up > local.patch' c-m
+2|'git stash pop' c-m
+|'git apply local.patch' c-m
+
+# plugins
+init plugins |'git submodule update --init --depth=1 --recursive' c-m
+update plugins |'git submodule foreach git checkout master && git submodule foreach git pull' c-m
+
+# markdown
+live-server |'mkdir -p /tmp/vimtemp/md2html && cd /tmp/vimtemp/md2html && live-server' c-m

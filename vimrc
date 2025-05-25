@@ -61,13 +61,14 @@ nnoremap \<bs> :set invpaste<CR>
 nnoremap \= :set invwrap<CR>
 nnoremap \/ :call MarkSearch()<CR>
 nnoremap \? :call ClearMarkSearch()<CR>
+nnoremap <f2> *N
 " use OSC52, only support yank, paste by <ctrl-shift V> in insert mode
 "vnoremap <c-y> "my:call OSC52('m')<CR>
 vnoremap <c-y> "+y
 vnoremap <c-p> "+p
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
-vnoremap * "my/\V<c-r>m
+vnoremap <f2> "my/\V<c-r>=SearchLines()<cr><cr>N
 cnoremap <c-f1> %:p:h
 snoremap <c-x> _<bs><c-x>
 
@@ -265,6 +266,45 @@ if executable('sd')
     au FileType lazybook setlocal ft=sh | nnoremap <buffer> <cr> :call ReadBook("sd")<cr> | nnoremap <buffer> / /^| set invwrap
 endif
 
+" markdown live preview
+" dep: md2html live-server(nodejs)
+let s:gen_path = "/tmp/vimtemp/md2html"
+let s:html_css = expand("<sfile>:p:h")."/archive/style.css"
+let s:md2html_script = expand("<sfile>:p:h")."/archive/md2html.sh"
+function! TransMD2HTML(md_path)
+    if !exists("g:vimtemp")
+        call system("mkdir -p ".s:gen_path)
+        call system("cp -f ".s:html_css." ".s:gen_path)
+        let g:vimtemp = 1
+    endif
+    call system(s:md2html_script." ".a:md_path." ".s:gen_path."/index.html")
+endfunction
+if executable('md2html')
+    au BufWritePost *.md call TransMD2HTML(expand("%:p"))
+endif
+
+" markdown upload image
+" dep: xclip/curl/magick
+let s:upload_script = expand("<sfile>:p:h")."/upload.sh"
+inoremap <f1> <c-r>=UploadImg()<cr>
+function! UploadImg()
+    let l:input = input("[img]:", " ")
+    if l:input == ""
+        return ""
+    endif
+    if l:input[0] == " "
+        let l:input = l:input[1:]
+    endif
+    if l:input == ""
+        call system("xclip -selection clipboard -t image/png -o > /tmp/vimupload.png")
+        let l:input = "/tmp/vimupload.png"
+    elseif l:input[:3] == "http"
+        call system("curl ".l:input." |magick - png:/tmp/vimupload.png")
+        let l:input = "/tmp/vimupload.png"
+    endif
+    return system(s:upload_script." ".l:input)[:-2]
+endfunction
+
 " marksearch
 function! MarkSearch()
     if !exists("w:match_dict")
@@ -282,16 +322,25 @@ function! MarkSearch()
 endfunction
 
 function! ClearMarkSearch()
-    let l:count = 1
-    let l:choice = []
+    if !exists("w:match_dict")
+        let w:match_dict = []
+        let w:match_col = 0
+    endif
+    let l:count = 2
+    let l:choice = ['1. ALL']
     for match in w:match_dict
         call add(l:choice, (l:count.". ".match[1]))
         let l:count += 1
     endfor
     let l:input = inputlist(l:choice)
-    if l:input != 0 && l:input <= len(w:match_dict)
-        call matchdelete(w:match_dict[l:input - 1][0])
-        call remove(w:match_dict, (l:input - 1))
+    if l:input == 0
+        return
+    elseif l:input == 1
+        call clearmatches()
+        let w:match_dict = []
+    elseif (l:input - 2) < len(w:match_dict)
+        call matchdelete(w:match_dict[l:input - 2][0])
+        call remove(w:match_dict, (l:input - 2))
     endif
 endfunction
 
@@ -328,6 +377,10 @@ if !exists("s:cmd_qf_handle")
     \   ['git_diff', function('s:gitDiffQf')],
     \]
 endif
+
+function! SearchLines()
+    return substitute(getreg("m"), '\n', '\\n', "g")
+endfunction
 
 function! CommandQf()
     let l:cmd = input("CMD: ")
