@@ -55,12 +55,13 @@ nnoremap \a :call JumpToNormalBuffer("bp")<CR>
 nnoremap \w :cn<CR>zz
 nnoremap \q :cp<CR>zz
 nnoremap <silent> \<cr> :call ToggleQuickFix()<CR>
-nnoremap \] :Lex<CR>
-nnoremap \[ :Lex %:p:h<CR>
+nnoremap \] :<c-r>=AutoRex()<CR><CR>
+nnoremap \[ :Ex %:p:h<CR>
 nnoremap \<bs> :set invpaste<CR>
 nnoremap \= :set invwrap<CR>
 nnoremap \/ :call MarkSearch()<CR>
 nnoremap \? :call ClearMarkSearch()<CR>
+nnoremap \1 :call FzfSelectBuffer()<CR>
 nnoremap <f2> *N
 " use OSC52, only support yank, paste by <ctrl-shift V> in insert mode
 "vnoremap <c-y> "my:call OSC52('m')<CR>
@@ -77,8 +78,7 @@ colorscheme waterless
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_winsize = 20
+let g:netrw_list_hide = '^\..*$'
 
 au BufWinLeave * if expand("%:p") != "" && InMemory(expand("%:p")) | silent mkview
 au BufWinEnter * if expand("%:p") != "" && InMemory(expand("%:p")) | silent! loadview
@@ -203,11 +203,18 @@ function! s:on_lsp_buffer_enabled() abort
 endfunction
 
 function! s:netrw_config()
-    map <buffer> \a <nop>
-    map <buffer> \s <nop>
-    nmap <buffer> h -zz
-    nmap <buffer> l zz<CR>
-    setlocal statusline=\ ●\ %{&ft}
+    setlocal rnu
+    setlocal statusline=%#Keyword#\ _\ %{get(b:,'netrw_curdir','')}
+    nmap <buffer> h -
+    nmap <buffer> l <CR>
+    nmap <buffer> gf :call FzfOpenFile(b:netrw_curdir)<CR>
+endfunction
+
+function! AutoRex()
+    if exists(":Rex")
+        return "Rex"
+    endif
+    return "Ex"
 endfunction
 
 function! s:quickfix_config()
@@ -303,6 +310,26 @@ function! UploadImg()
         let l:input = "/tmp/vimupload.png"
     endif
     return system(s:upload_script." ".l:input)[:-2]
+endfunction
+
+" fzf
+function! FzfOpenFile(path)
+    let l:file = system("cd ".a:path." && find . -type f |fzf --height=10%")
+    redraw!
+    if l:file != ""
+        exec "edit ".a:path."/".l:file
+    endif
+endfunction
+
+function! FzfSelectBuffer()
+    let l:buffers = map(filter(range(1, bufnr('$')), 'buflisted(v:val)'), 'v:val." ".bufname(v:val)')
+    let l:command = 'echo "' . join(l:buffers, "\n") . '" | fzf --height=10%'
+    let l:sel = system(command)
+    redraw!
+    if l:sel != ""
+        let l:sel = split(l:sel)[0]
+        exec "buffer ".l:sel
+    endif
 endfunction
 
 " marksearch
