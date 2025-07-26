@@ -14,7 +14,7 @@ set ignorecase
 set wildmenu
 set wildoptions+=pum
 set shiftwidth=4
-set tabstop=6
+set tabstop=8
 set expandtab
 set softtabstop=4
 set spr
@@ -27,6 +27,7 @@ set undofile
 set noshowmode
 set showcmd
 set sloc=statusline
+set directory=~/.vim/swap
 set undodir=~/.vim/undo
 set vop-=options
 set gp=git\ grep\ -n
@@ -78,7 +79,7 @@ colorscheme waterless
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 let g:netrw_banner = 0
-let g:netrw_list_hide = '^\..*$'
+let g:netrw_list_hide = '^\.[^\w]\+$'
 
 au BufWinLeave * if expand("%:p") != "" && InMemory(expand("%:p")) | silent mkview
 au BufWinEnter * if expand("%:p") != "" && InMemory(expand("%:p")) | silent! loadview
@@ -175,6 +176,7 @@ function! InvMemory()
         call add(s:memory, l:filename)
     endif
     call writefile(s:memory, s:memory_file)
+    redraw!
 endfunction
 
 function! PeekAdd()
@@ -196,10 +198,10 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> K <plug>(lsp-hover)
     nnoremap <buffer> <expr><c-j> lsp#scroll(+1)
     nnoremap <buffer> <expr><c-k> lsp#scroll(-1)
-    vmap <silent> <buffer> <nop> <plug>(lsp-float-close)
-    vmap <silent> <buffer> <nop> <plug>(lsp-quickpick-cancel)
-    vmap <silent> <buffer> <nop> <Plug>(lsp-quickpick-move-next)
-    vmap <silent> <buffer> <nop> <Plug>(lsp-quickpick-move-previous)
+    vmap <silent> <buffer> <F20> <plug>(lsp-float-close)
+    vmap <silent> <buffer> <F20> <plug>(lsp-quickpick-cancel)
+    vmap <silent> <buffer> <F20> <Plug>(lsp-quickpick-move-next)
+    vmap <silent> <buffer> <F20> <Plug>(lsp-quickpick-move-previous)
 endfunction
 
 function! s:netrw_config()
@@ -207,6 +209,7 @@ function! s:netrw_config()
     setlocal statusline=%#Keyword#\ _\ %{get(b:,'netrw_curdir','')}
     nmap <buffer> h -
     nmap <buffer> l <CR>
+    nmap <buffer> <backspace> gh
     nmap <buffer> gf :call FzfOpenFile(b:netrw_curdir)<CR>
 endfunction
 
@@ -220,7 +223,9 @@ endfunction
 function! s:quickfix_config()
     map <buffer> \a <nop>
     map <buffer> \s <nop>
-    nmap <buffer> <space> <cr>zz<c-w>p
+    map <buffer> <backspace> <cr>zz<c-w>p
+    map <buffer> <left> :colder<cr>
+    map <buffer> <right> :cnewer<cr>
 endfunction
 
 function! OSC52(reg)
@@ -406,7 +411,9 @@ if !exists("s:cmd_qf_handle")
 endif
 
 function! SearchLines()
-    return substitute(getreg("m"), '\n', '\\n', "g")
+    let l:buf = getreg("m")
+    let l:buf = escape(l:buf, '\/')
+    return substitute(l:buf, '\n', '\\n', "g")
 endfunction
 
 function! CommandQf()

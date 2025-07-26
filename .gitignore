@@ -1,7 +1,9 @@
 view
 memory
 undo/*
+swap/*
 !undo/.empty
+!swap/.empty
 .netrwhist
 quickpeek
 *.patch
