@@ -18,6 +18,9 @@ set tabstop=8
 set expandtab
 set softtabstop=4
 set spr
+set timeout
+set ttimeout
+set timeoutlen=3000
 set ttimeoutlen=10
 set signcolumn=yes
 set cursorline
@@ -57,9 +60,10 @@ nnoremap \w :cn<CR>zz
 nnoremap \q :cp<CR>zz
 nnoremap <silent> \<cr> :call ToggleQuickFix()<CR>
 nnoremap \] :<c-r>=AutoRex()<CR><CR>
-nnoremap \[ :Ex %:p:h<CR>
+nnoremap \[ :let filename_=expand("%:t")<CR>:Ex %:p:h<CR>:call search(filename_)<CR>
 nnoremap \<bs> :set invpaste<CR>
 nnoremap \= :set invwrap<CR>
+nnoremap \- :call ToggleHardCore()<CR>
 nnoremap \/ :call MarkSearch()<CR>
 nnoremap \? :call ClearMarkSearch()<CR>
 nnoremap \1 :call FzfSelectBuffer()<CR>
@@ -79,15 +83,15 @@ colorscheme waterless
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 let g:netrw_banner = 0
-let g:netrw_list_hide = '^\.[^\w]\+$'
+let g:netrw_list_hide = '^\.[^a-zA-Z0-9_]\+$' . ',' .'\(^\|\s\s\)\zs\.\S\+'
 
-au BufWinLeave * if expand("%:p") != "" && InMemory(expand("%:p")) | silent mkview
-au BufWinEnter * if expand("%:p") != "" && InMemory(expand("%:p")) | silent! loadview
-au filetype netrw call s:netrw_config()
-au filetype qf call s:quickfix_config()
-augroup lsp_install
+augroup au_add
     au!
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+    au BufWinLeave * if expand("%:p") != "" && InMemory(expand("%:p")) | silent mkview
+    au BufWinEnter * if expand("%:p") != "" && InMemory(expand("%:p")) | silent! loadview
+    au FileType netrw call s:netrw_config()
+    au FileType qf call s:quickfix_config()
+    au User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
 set fillchars=fold:\ 
@@ -207,10 +211,14 @@ endfunction
 function! s:netrw_config()
     setlocal rnu
     setlocal statusline=%#Keyword#\ _\ %{get(b:,'netrw_curdir','')}
-    nmap <buffer> h -
-    nmap <buffer> l <CR>
-    nmap <buffer> <backspace> gh
+    nmap <buffer> h <Plug>NetrwBrowseUpDir
+    nmap <buffer> l <Plug>NetrwLocalBrowseCheck
+    if !exists("b:netrw_hidden_key")
+        let b:netrw_hidden_key = maparg("gh", "n")
+    endif
+    exec "nmap <buffer> <backspace> " . b:netrw_hidden_key
     nmap <buffer> gf :call FzfOpenFile(b:netrw_curdir)<CR>
+    nmap <buffer> gh :edit $HOME<CR>
 endfunction
 
 function! AutoRex()
@@ -236,6 +244,20 @@ function! OSC52(reg)
         return
     endif
     echo ret
+endfunction
+
+function! ToggleHardCore()
+    if &l:expandtab
+        echo "hardcore"
+        setlocal noexpandtab
+        setlocal shiftwidth=8
+        setlocal softtabstop=0
+    else
+        echo "soft"
+        setlocal expandtab
+        setlocal shiftwidth=4
+        setlocal softtabstop=4
+    endif
 endfunction
 
 function! ToggleQuickFix()
@@ -446,7 +468,7 @@ endif
 if executable('clangd')
     au User lsp_setup call lsp#register_server({
         \ 'name': 'clangd',
-        \ 'cmd': {server_info->['clangd', '--header-insertion=never', '--enable-config']},
+        \ 'cmd': {server_info->['clangd', '--header-insertion=never', '--enable-config', '--background-index=0']},
         \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp'],
         \ })
 endif

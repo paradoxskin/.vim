@@ -5,6 +5,7 @@ swap/*
 !undo/.empty
 !swap/.empty
 .netrwhist
+.netrwbook
 quickpeek
 *.patch
 upload.sh
