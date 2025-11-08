@@ -297,7 +297,7 @@ call LoadMemory()
 " lazybook
 if executable('sd')
     au BufRead,BufNewFile *.lazybook setfiletype lazybook
-    au FileType lazybook setlocal ft=sh | nnoremap <buffer> <cr> :call ReadBook("sd")<cr> | nnoremap <buffer> / /^| set invwrap
+    au FileType lazybook setlocal ft=sh | nnoremap <buffer> <cr> :call ReadBook("sd")<cr>| nnoremap <buffer> / /^| set invwrap
 endif
 
 " markdown live preview
