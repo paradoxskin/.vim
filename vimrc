@@ -284,20 +284,38 @@ function! JumpToNormalBuffer(command)
 endfunction
 
 function! ReadBook(command)
+    " desc @action|argv
     let l:content = getline(".")
-    let l:begin = match(l:content, "|")
-    if l:begin == -1
+    let l:action_begin = match(l:content, "@")
+    let l:argv_begin = match(l:content, "|")
+    if l:argv_begin == -1
         return
     endif
-    call system(a:command, l:content[l:begin+1:])
+    call system(a:command, l:content[l:argv_begin+1:])
+    if v:shell_error == 0 && l:action_begin != -1 && l:action_begin < l:argv_begin
+        exec "normal! ".l:content[l:action_begin+1:l:argv_begin-1]
+    endif
 endfunction
 
 call LoadMemory()
 
 " lazybook
 if executable('sd')
-    au BufRead,BufNewFile *.lazybook setfiletype lazybook
-    au FileType lazybook setlocal ft=sh | nnoremap <buffer> <cr> :call ReadBook("sd")<cr>| nnoremap <buffer> / /^| set invwrap
+
+augroup lazybook
+    au!
+    au BufRead,BufNewFile *.lazybook setf lazybook
+    au FileType lazybook setlocal nowrap
+    au FileType lazybook nnoremap <buffer> <cr> :call ReadBook("sd")<cr>
+    au FileType lazybook nnoremap <buffer> / /^
+    au FileType lazybook syntax match Comment /^#.*$/ contained
+    au FileType lazybook syntax match Comment /@[^|]*/
+    au FileType lazybook syntax match Debug /^[^@|]*/ contains=Comment
+    au FileType lazybook syntax match String /'.*'/ contained
+    au FileType lazybook syntax match String /".*"/ contained
+    au FileType lazybook syntax match Keyword /|.*$/ contains=String
+augroup END
+
 endif
 
 " markdown live preview
