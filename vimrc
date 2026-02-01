@@ -4,6 +4,7 @@ set nocompatible
 set nu
 set rnu
 set hidden
+set nomore
 set shortmess+=c
 set backspace=2
 set autoindent
@@ -121,7 +122,7 @@ endfunction
 function! Blackbox()
     let len = 55
     let text = getline(v:foldstart)
-    if len <= strlen(text)
+    if len - 5 <= strlen(text)
         let text = strpart(text, 0, len - 5) . ".."
     endif
     let cur = line('.')
@@ -329,7 +330,7 @@ function! TransMD2HTML(md_path)
         call system("cp -f ".s:html_css." ".s:gen_path)
         let g:vimtemp = 1
     endif
-    call system(s:md2html_script." ".a:md_path." ".s:gen_path."/index.html")
+    call system(s:md2html_script." ".a:md_path." ".s:gen_path."/index.html &")
 endfunction
 if executable('md2html')
     au BufWritePost *.md call TransMD2HTML(expand("%:p"))
@@ -367,7 +368,18 @@ function! FzfOpenFile(path)
 endfunction
 
 function! FzfSelectBuffer()
-    let l:buffers = map(filter(range(1, bufnr('$')), 'buflisted(v:val)'), 'v:val." ".bufname(v:val)')
+    let l:last = bufnr('#')
+    let l:now = bufnr('%')
+    let l:order = filter(range(1, bufnr('$')), 'v:val != l:now && buflisted(v:val)')
+    if l:order == []
+        echo "[-] no other bufs"
+        return
+    endif
+    if l:last > 0 && index(l:order, l:last) >= 0
+        call remove(l:order, index(l:order, l:last))
+        call insert(l:order, l:last, 0)
+    endif
+    let l:buffers = map(l:order, 'v:val." ".bufname(v:val)')
     let l:command = 'echo "' . join(l:buffers, "\n") . '" | fzf --height=10%'
     let l:sel = system(command)
     redraw!
@@ -486,7 +498,7 @@ endif
 if executable('clangd')
     au User lsp_setup call lsp#register_server({
         \ 'name': 'clangd',
-        \ 'cmd': {server_info->['clangd', '--header-insertion=never', '--enable-config', '--background-index=0']},
+        \ 'cmd': {server_info->['clangd', '--header-insertion=never', '--enable-config', '--background-index=1']},
         \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp'],
         \ })
 endif
