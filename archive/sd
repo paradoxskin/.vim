@@ -1,11 +1,27 @@
 #!/bin/bash
 
+back=1
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        -N)
+            back=0
+            shift
+            ;;
+        *)
+            echo "unknown arg: $1"
+            shift
+            ;;
+    esac
+done
+
 read -r content
 current_pane=$TMUX_PANE
 tmux display-panes -d 0
 target_pane=$(tmux display-message -p '#{pane_id}')
-tmux select-pane -t $current_pane
 if [[ "$current_pane" == "$target_pane" ]]; then
     exit 1
+fi
+if [[ $back -eq 1 ]]; then
+    tmux select-pane -t $current_pane
 fi
 (sleep 0.1 && eval "tmux send -t $target_pane $content" &)

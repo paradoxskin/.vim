@@ -9,3 +9,4 @@ swap/*
 quickpeek
 *.patch
 upload.sh
+genbody.sh

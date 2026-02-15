@@ -106,6 +106,7 @@ let g:miniSnip_trigger = '<c-f1>'
 let g:miniSnip_complkey = '<c-x><c-f1>'
 let g:miniSnip_extends = {
     \ 'cpp': ['c'],
+    \ 'c': ['asm'],
 \}
 let s:quickpeek = expand("<sfile>:p:h") . "/quickpeek"
 
@@ -120,10 +121,18 @@ function! InvLspDocHl()
 endfunction
 
 function! Blackbox()
+    " xxx   │
+    " ▶ xxx █
+    " | 55 |
     let len = 55
     let text = getline(v:foldstart)
-    if len - 5 <= strlen(text)
-        let text = strpart(text, 0, len - 5) . ".."
+    if strdisplaywidth(text) + 3 > len
+        for i in range(len, 0, -1)
+            if strdisplaywidth(text[:i]."..") + 3 <= len
+                let text = text[:i].".."
+                break
+            endif
+        endfor
     endif
     let cur = line('.')
     if v:foldstart <= cur && cur <= v:foldend
@@ -284,39 +293,45 @@ function! JumpToNormalBuffer(command)
     endwhile
 endfunction
 
-function! ReadBook(command)
-    " desc @action|argv
-    let l:content = getline(".")
-    let l:action_begin = match(l:content, "@")
-    let l:argv_begin = match(l:content, "|")
-    if l:argv_begin == -1
-        return
-    endif
-    call system(a:command, l:content[l:argv_begin+1:])
-    if v:shell_error == 0 && l:action_begin != -1 && l:action_begin < l:argv_begin
-        exec "normal! ".l:content[l:action_begin+1:l:argv_begin-1]
-    endif
-endfunction
-
 call LoadMemory()
 
 " lazybook
-if executable('sd')
-
 augroup lazybook
     au!
     au BufRead,BufNewFile *.lazybook setf lazybook
     au FileType lazybook setlocal nowrap
-    au FileType lazybook nnoremap <buffer> <cr> :call ReadBook("sd")<cr>
-    au FileType lazybook nnoremap <buffer> / /^
+    au FileType lazybook nnoremap <buffer> / /^#\?
     au FileType lazybook syntax match Comment /^#.*$/ contained
+    au FileType lazybook syntax match Comment /^[^|]*$/ contained
     au FileType lazybook syntax match Comment /@[^|]*/
     au FileType lazybook syntax match Debug /^[^@|]*/ contains=Comment
-    au FileType lazybook syntax match String /'.*'/ contained
+    au FileType lazybook syntax match String /'[^'].*'/ contained
     au FileType lazybook syntax match String /".*"/ contained
     au FileType lazybook syntax match Keyword /|.*$/ contains=String
 augroup END
 
+function! ReadBook(command)
+    let l:content = getline(".")
+    " desc [@action][|argv]|stdin
+    let m = matchlist(l:content, '^[^@|]*\(@\([^|]\+\)\)\?\(|\(-[^ ]\+\)\)\?|\(.*\)')
+    let l:action = m[2]
+    let l:arg = m[4]
+    let l:stdin = m[5]
+    if l:stdin == ''
+        return
+    endif
+    let l:command = a:command
+    if l:arg != ''
+        let l:command .= " ".l:arg
+    endif
+    call system(l:command, l:stdin)
+    if v:shell_error == 0 && l:action != ''
+        call feedkeys(l:action)
+    endif
+endfunction
+
+if executable('sd')
+    au FileType lazybook nnoremap <buffer> <cr> :call ReadBook("sd")<cr>
 endif
 
 " markdown live preview
