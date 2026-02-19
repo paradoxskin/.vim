@@ -10,7 +10,7 @@ echo '<!DOCTYPE html>'
 echo '<html>'
 echo '<head><meta charset="utf-8"><title>preview</title></head>'
 echo '<body>'
-bash ${DIR_SCRIPT_PATH}/gencmd.sh $1
+bash ${DIR_SCRIPT_PATH}/genbody.sh $1
 echo '<link rel="stylesheet" href="style.css">'
 echo '</body>'
 echo '</html>'
