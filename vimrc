@@ -40,8 +40,10 @@ set cot=menu,preview
 set jop=stack
 set splitbelow
 set splitright
+set nomodeline
 
 inoremap<silent><expr> <up> i1m#Toggle()
+vnoremap<silent><expr> <up> i1m#Toggle()
 nnoremap <space> :
 vnoremap <space> :
 nnoremap ` @
@@ -69,6 +71,7 @@ nnoremap \/ :call MarkSearch()<CR>
 nnoremap \? :call ClearMarkSearch()<CR>
 nnoremap \1 :call FzfSelectBuffer()<CR>
 nnoremap <f2> *N
+nnoremap \q :call Vkk()<CR>
 " use OSC52, only support yank, paste by <ctrl-shift V> in insert mode
 "vnoremap <c-y> "my:call OSC52('m')<CR>
 vnoremap <c-y> "+y
@@ -507,6 +510,10 @@ function! CommandQf()
         call setqflist(l:qflist, "r")
         copen
     endif
+endfunction
+
+function! Vkk()
+    call writefile([expand("%:p")], expand("~/.klock"), "a")
 endfunction
 
 " python c/c++ rust go java html js lua pico8 cmake
