@@ -71,10 +71,10 @@ nnoremap \/ :call MarkSearch()<CR>
 nnoremap \? :call ClearMarkSearch()<CR>
 nnoremap \1 :call FzfSelectBuffer()<CR>
 nnoremap <f2> *N
-nnoremap \q :call Vkk()<CR>
+nnoremap \e :call Vkk()<CR>
 " use OSC52, only support yank, paste by <ctrl-shift V> in insert mode
-"vnoremap <c-y> "my:call OSC52('m')<CR>
-vnoremap <c-y> "+y
+"vnoremap iy "my:call OSC52('m')<CR>
+vnoremap iy "+y
 vnoremap <c-p> "+p
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
@@ -104,6 +104,7 @@ augroup au_add
     au FileType netrw call s:netrw_config()
     au FileType qf call s:quickfix_config()
     au User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+    au FileType * set fo-=o
 augroup END
 
 set fillchars=fold:\ 
@@ -238,8 +239,9 @@ function! s:netrw_config()
         let b:netrw_hidden_key = maparg("gh", "n")
     endif
     exec "nmap <buffer> <backspace> " . b:netrw_hidden_key
-    nmap <buffer> gf :call FzfOpenFile(b:netrw_curdir)<CR>
     nmap <buffer> gh :edit $HOME<CR>
+    nmap <buffer> bvf :call FzfOpenFile(b:netrw_curdir)<CR>
+    nmap <buffer> bcd :call OpenGitTopDir(b:netrw_curdir)<CR>
 endfunction
 
 function! AutoRex()
@@ -384,6 +386,17 @@ function! UploadImg()
     return system(s:upload_script." ".l:input)[:-2]
 endfunction
 
+function! s:getGitTopDir(path)
+    return trim(system("cd ".a:path." && git rev-parse --show-toplevel"))
+endfunction
+
+function! OpenGitTopDir(path)
+    let l:git_top = s:getGitTopDir(path)
+    if l:git_top != ""
+        exec "edit " . l:git_top
+    endif
+endfunction
+
 " fzf
 function! FzfOpenFile(path)
     let l:file = system("cd ".a:path." && find . -type f |fzf --height=10%")
@@ -454,36 +467,61 @@ function! ClearMarkSearch()
     endif
 endfunction
 
+call sign_define('git_del', {'text': "-"})
+call sign_define('git_add', {'text': "+"})
+call sign_define('git_del_add', {'text': "="})
 function! s:gitDiffQf(content)
     let l:lines = split(a:content, '\n')
     let l:qflist = []
     let l:nr = 0
+    let l:git_top = s:getGitTopDir(expand("%:p:h"))
     let l:filename = 'gitdiff'
+    let l:lnormal = 1
+    let l:isdir = 0
     for line in l:lines
         let l:normal = 1
         if line =~ '^+++ '
-            let l:filename = matchlist(line, '^+++ b/\(.*\)')[1]
-        elseif line =~ '^--- ' "ignore
+            if line =~ '^+++ /dev/null' "delete ignore
+                continue
+            endif
+            let l:filename = l:git_top."/".matchlist(line, '^+++ b/\(.*\)')[1]
+            if isdirectory(l:filename)
+                let l:isdir = 1
+                continue
+            endif
+            let l:isdir = 0
+        elseif line =~ '^--- ' "delete ignore
         elseif line =~ '^@@ '
-            let l:nr = matchlist(line, '^@@.*+\(.*\),.*@@')[1] - 2
+            let l:nr = matchlist(line, '^@@.*+\(.*\)[, ].*@@')[1] - 2
         elseif line =~ '^+'
             let l:normal = 0
         elseif line =~ '^-'
             let l:nr -= 1
+            let l:normal = 2
         endif
         let l:nr += 1
-        if l:normal
+        if l:normal == 1 || l:normal == 2 || l:isdir
             call add(l:qflist, {'text': line})
+            if (l:normal == 1 && l:lnormal == 2 && l:filename != 'gitdiff' && l:isdir == 0)
+                call sign_place(0, 'gitsign', 'git_del', l:filename, {'lnum': l:nr})
+            endif
         else
             call add(l:qflist, {'filename': l:filename, 'lnum': l:nr, 'text': line})
+            if (l:lnormal != 2)
+                call sign_place(0, 'gitsign', 'git_add', l:filename, {'lnum': l:nr})
+            else
+                call sign_place(0, 'gitsign', 'git_del_add', l:filename, {'lnum': l:nr})
+            endif
         endif
+        let l:lnormal = l:normal
     endfor
-    return l:qflist
+    call setqflist(l:qflist, "r")
+    copen
 endfunction
 
 " cmd_quickfix
-if !exists("s:cmd_qf_handle")
-    let s:cmd_qf_handle = [
+if !exists("s:cmd_handles")
+    let s:cmd_handles = [
     \   ['git_diff', function('s:gitDiffQf')],
     \]
 endif
@@ -494,21 +532,19 @@ function! SearchLines()
     return substitute(l:buf, '\n', '\\n', "g")
 endfunction
 
-function! CommandQf()
+function! Cmdcb()
     let l:cmd = input("CMD: ")
     let l:output = system(l:cmd)
     let l:idx = 0
-    let l:choice = []
-    for qf_handle in s:cmd_qf_handle
+    let l:choices = []
+    for qf_handle in s:cmd_handles
         let l:idx += 1
-        call add(l:choice, l:idx.". ".qf_handle[0])
+        call add(l:choices, l:idx.". ".qf_handle[0])
     endfor
     redraw!
-    let l:input = inputlist(l:choice)
-    if 0 < l:input && l:input <= len(s:cmd_qf_handle)
-        let l:qflist = s:cmd_qf_handle[l:input - 1][1](l:output)
-        call setqflist(l:qflist, "r")
-        copen
+    let l:input = inputlist(l:choices)
+    if 0 < l:input && l:input <= len(s:cmd_handles)
+        call s:cmd_handles[l:input - 1][1](l:output)
     endif
 endfunction
 
